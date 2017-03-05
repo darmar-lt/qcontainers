@@ -36,8 +36,8 @@ during the linking step.
 
 The qContainers library comes with rother extensive test-cases contained in
 'tests' directory. Files 'test_*.f90' can also be used for learning how to use
-the containers. The tests can be build using Code::Blocks IDE. A provided C::B 
-project file 'qcontainers.cbp' can be used to compile the tests. The project 
-'qcontainers_CBbuild.cbp' can be used to compile C files into the static library
-as well as Fortran tests files. In this case, the use of CMake is not required.
+the containers. The tests can be build using Code::Blocks IDE project file 
+'qcontainers.cbp'. The project 'qcontainers_CBbuild.cbp' can be used to compile 
+C files into the static library as well as Fortran tests files. In this case, 
+the use of CMake is not required.
 
