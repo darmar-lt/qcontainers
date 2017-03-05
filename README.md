@@ -2,7 +2,7 @@ About
 =====
 
 *qContainers* is a container library for Fortran language.
-It anables to store *any internal* Fortran data type and 
+It enables to store *any internal* Fortran data type and 
 *any derived* data type to the container.
 The library wraps a subset of containers from qLibc library for C language. 
 
@@ -24,7 +24,7 @@ compilers.
 ## License
 
 qContainers is published under 2-clause BSD license known as Simplified BSD License.
-Please refer the LICENSE.md document included in the package for more details.
+Please refer the LICENSE.md document included in the repository for more details.
 
 
 ## Consistent API Look
