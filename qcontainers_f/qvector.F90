@@ -1,3 +1,5 @@
+#include "include_defines.fi"
+
 !===========================================
 !
 !===========================================
@@ -346,8 +348,11 @@ contains
     !!
     subroutine qvector_addfirst(self, val_data, success)
         class(qvector_t), intent(inout) :: self
-        include "nocheck_val_data.fi"
-        real, dimension(*), target, intent(in) :: val_data  !< value which is inserted
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*), target, intent(in) :: val_data   !< value which is inserted
+#else
+#include "nocheck_val_data.fi"
+#endif
         logical, optional, intent(out) :: success   !< returns .true. in case of success, .false. if error
 
         logical(c_bool) :: success_c
@@ -360,8 +365,11 @@ contains
     !!
     subroutine qvector_addlast(self, val_data, success)
         class(qvector_t), intent(inout) :: self
-        include "nocheck_val_data.fi"
-        real, dimension(*), target, intent(in) :: val_data  !< value which is inserted
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*), target, intent(in) :: val_data  !< value which is inserted
+#else
+#include "nocheck_val_data.fi"
+#endif
         logical, optional, intent(out) :: success   !< returns .true. in case of success, .false. if error
 
         logical(c_bool) :: success_c
@@ -375,8 +383,11 @@ contains
     subroutine qvector_addat(self, idx, val_data, success)
         class(qvector_t), intent(inout) :: self
         integer, intent(in)            :: idx      !< index (1...size+1) at which the specified element is to be inserted
-        include "nocheck_val_data.fi"
-        real, dimension(*), target, intent(in) :: val_data !< value which is inserted
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*), target, intent(in) :: val_data  !< value which is inserted
+#else
+#include "nocheck_val_data.fi"
+#endif
         logical, optional, intent(out) :: success  !< returns .true. in case of success, .false. if error
 
         logical(c_bool) :: success_c
@@ -398,8 +409,11 @@ contains
     !!
     subroutine qvector_getfirst(self, val_data, success)
         class(qvector_t), intent(inout) :: self
-        include "nocheck_val_data.fi"
-        real, dimension(*), target, intent(inout) :: val_data  !< value of the first element
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*), target, intent(inout) :: val_data  !< value of the first element
+#else
+#include "nocheck_val_data.fi"
+#endif
         logical, optional, intent(out) :: success   !< returns .true. in case of success, .false. if error
 
         logical(c_bool) :: newmem = .false.
@@ -407,7 +421,7 @@ contains
 
         val_data_p = qvector_getat_c(self%q_cp, 0_c_int, newmem)
         if (c_associated(val_data_p)) then
-            call qlibc_copy_data_c(val_data_p, val_data, self%size_data, newmem)
+            call qlibc_copy_data_c(val_data_p, c_loc(val_data), self%size_data, newmem)
             if (present(success)) success = .true.
         else
             if (present(success)) success = .false.
@@ -418,8 +432,11 @@ contains
     !!
     subroutine qvector_getlast(self, val_data, success)
         class(qvector_t), intent(inout) :: self
-        include "nocheck_val_data.fi"
-        real, dimension(*), target, intent(inout) :: val_data  !< value of the last element
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*), target, intent(inout) :: val_data  !< value of the last element
+#else
+#include "nocheck_val_data.fi"
+#endif
         logical, optional, intent(out) :: success   !< returns .true. in case of success, .false. if error
 
         logical(c_bool) :: newmem = .false.
@@ -427,7 +444,7 @@ contains
 
         val_data_p = qvector_getat_c(self%q_cp, -1_c_int, newmem)
         if (c_associated(val_data_p)) then
-            call qlibc_copy_data_c(val_data_p, val_data, self%size_data, newmem)
+            call qlibc_copy_data_c(val_data_p, c_loc(val_data), self%size_data, newmem)
             if (present(success)) success = .true.
         else
             if (present(success)) success = .false.
@@ -439,8 +456,11 @@ contains
     subroutine qvector_getat(self, idx, val_data, success)
         class(qvector_t), intent(inout) :: self
         integer, intent(in)            :: idx      !< index (1...max) at which the value should be returned
-        include "nocheck_val_data.fi"
-        real, dimension(*), target, intent(inout) :: val_data  !< return value at index idx
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*), target, intent(inout) :: val_data  !< return value at index idx
+#else
+#include "nocheck_val_data.fi"
+#endif
         logical, optional, intent(out) :: success              !< returns .true. in case of success, .false. if error
 
         logical(c_bool) :: newmem = .false.
@@ -457,7 +477,7 @@ contains
         end if
         val_data_p = qvector_getat_c(self%q_cp, idx_c, newmem)
         if (c_associated(val_data_p)) then
-            call qlibc_copy_data_c(val_data_p, val_data, self%size_data, newmem)
+            call qlibc_copy_data_c(val_data_p, c_loc(val_data), self%size_data, newmem)
             if (present(success)) success = .true.
         else
             if (present(success)) success = .false.
@@ -468,8 +488,11 @@ contains
     !!
     subroutine qvector_setfirst(self, val_data, success)
         class(qvector_t), intent(inout) :: self
-        include "nocheck_val_data.fi"
-        real, dimension(*), target, intent(in) :: val_data  !< value which is set to the first element
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*), target, intent(in) :: val_data   !< value which is set to the first element
+#else
+#include "nocheck_val_data.fi"
+#endif
         logical, optional, intent(out) :: success           !< returns .true. in case of success, .false. if error
 
         logical(c_bool) :: success_c
@@ -482,8 +505,11 @@ contains
     !!
     subroutine qvector_setlast(self, val_data, success)
         class(qvector_t), intent(inout) :: self
-        include "nocheck_val_data.fi"
-        real, dimension(*), target, intent(in) :: val_data  !< value which is set to the last element
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*), target, intent(in) :: val_data   !< value which is set to the last element
+#else
+#include "nocheck_val_data.fi"
+#endif
         logical, optional, intent(out) :: success   !< returns .true. in case of success, .false. if error
 
         logical(c_bool) :: success_c
@@ -497,8 +523,11 @@ contains
     subroutine qvector_setat(self, idx, val_data, success)
         class(qvector_t), intent(inout) :: self
         integer, intent(in)            :: idx      !< index (1...size+1) at which the specified element is to set
-        include "nocheck_val_data.fi"
-        real, dimension(*), target, intent(in) :: val_data !< value which is set
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*), target, intent(in) :: val_data   !< value which is set
+#else
+#include "nocheck_val_data.fi"
+#endif
         logical, optional, intent(out) :: success  !< returns .true. in case of success, .false. if error
 
         logical(c_bool) :: success_c
@@ -520,8 +549,11 @@ contains
     !!
     subroutine qvector_poplast(self, val_data, success)
         class(qvector_t), intent(inout) :: self
-        include "nocheck_val_data.fi"
-        real, dimension(*), target, intent(inout) :: val_data  !< return last value of the vector, which was removed
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*), target, intent(inout) :: val_data   !< return last value of the vector, which was removed
+#else
+#include "nocheck_val_data.fi"
+#endif
         logical, optional, intent(out) :: success   !< returns .true. in case of success, .false. if error
 
         logical(c_bool) :: freemem = .true.
@@ -529,7 +561,7 @@ contains
 
         val_data_p = qvector_popat_c(self%q_cp, -1_c_int)
         if (c_associated(val_data_p)) then
-            call qlibc_copy_data_c(val_data_p, val_data, self%size_data, freemem)
+            call qlibc_copy_data_c(val_data_p, c_loc(val_data), self%size_data, freemem)
             if (present(success)) success = .true.
         else
             if (present(success)) success = .false.
@@ -540,8 +572,11 @@ contains
     !!
     subroutine qvector_popfirst(self, val_data, success)
         class(qvector_t), intent(inout) :: self
-        include "nocheck_val_data.fi"
-        real, dimension(*), target, intent(inout) :: val_data  !< return first value of the vector, which was removed
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*), target, intent(inout) :: val_data   !< return first value of the vector, which was removed
+#else
+#include "nocheck_val_data.fi"
+#endif
         logical, optional, intent(out) :: success   !< returns .true. in case of success, .false. if error
 
         logical(c_bool) :: freemem = .true.
@@ -549,7 +584,7 @@ contains
 
         val_data_p = qvector_popat_c(self%q_cp, 0_c_int)
         if (c_associated(val_data_p)) then
-            call qlibc_copy_data_c(val_data_p, val_data, self%size_data, freemem)
+            call qlibc_copy_data_c(val_data_p, c_loc(val_data), self%size_data, freemem)
             if (present(success)) success = .true.
         else
             if (present(success)) success = .false.
@@ -561,8 +596,11 @@ contains
     subroutine qvector_popat(self, idx, val_data, success)
         class(qvector_t), intent(inout) :: self
         integer, intent(in)            :: idx      !< index (1...size) at which the element is to be removed
-        include "nocheck_val_data.fi"
-        real, dimension(*), target, intent(inout) :: val_data  !< return value which was removed
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*), target, intent(inout) :: val_data   !< return value which was removed
+#else
+#include "nocheck_val_data.fi"
+#endif
         logical, optional, intent(out) :: success   !< returns .true. in case of success, .false. if error
 
         logical(c_bool) :: freemem = .true.
@@ -579,7 +617,7 @@ contains
         end if
         val_data_p = qvector_popat_c(self%q_cp, idx_c)
         if (c_associated(val_data_p)) then
-            call qlibc_copy_data_c(val_data_p, val_data, self%size_data, freemem)
+            call qlibc_copy_data_c(val_data_p, c_loc(val_data), self%size_data, freemem)
             if (present(success)) success = .true.
         else
             if (present(success)) success = .false.
@@ -659,8 +697,11 @@ contains
     !!
     subroutine qvector_toarray(self, val_data)
         class(qvector_t), intent(inout) :: self
-        include "nocheck_val_data.fi"
-        real, dimension(*), target, intent(inout) :: val_data  !< return array which is filled with values
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*), dimension(*), target, intent(inout) :: val_data   !< return array which is filled with values
+#else
+#include "nocheck_val_data.fi"
+#endif
 
         call qvector_toarray_c(self%q_cp, c_loc(val_data))
     end subroutine
@@ -765,10 +806,17 @@ contains
     !!
     subroutine qvector_getdata(obj, val_data)
         class(qvector_obj_t) :: obj
-        include "nocheck_val_data.fi"
-        real, dimension(*), target :: val_data
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*), target, intent(inout) :: val_data   !< return array which is filled with values
+#else
+#include "nocheck_val_data.fi"
+#endif
 
         call qvector_getdata_c(obj%qobj, c_loc(val_data), obj%objsize)
     end subroutine
 
 end module qvector_m
+
+#ifdef USE_COMPILER_DIRECTIVE
+#undef USE_COMPILER_DIRECTIVE
+#endif

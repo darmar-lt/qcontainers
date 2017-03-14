@@ -24,10 +24,10 @@ compilers.
 ## License
 
 qContainers is published under 2-clause BSD license known as Simplified BSD License.
-Please refer the LICENSE.md document included in the repository for more details.
+Please refer the LICENSE.txt document included in the repository for more details.
 
 
-## Consistent API Look
+## API
 
 All container APIs have a consistent look and feel. Type-bound procedures 
 are used to make the use of the containers more convenient.
@@ -71,7 +71,7 @@ Read INSTALL.md file.
 ## Documentation
 
 There is no separate documentation available currently. However, the library has 
-rother extensive test-cases from which users can learn how to use the library.
+rather extensive test-cases from which users can learn how to use the library.
 
 ## Contribution
 

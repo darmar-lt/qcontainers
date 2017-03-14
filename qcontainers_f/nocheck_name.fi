@@ -2,3 +2,5 @@
 !DIR$ IGNORE_TKR name
 !$PRAGMA IGNORE_TKR name
 !DIR$ ATTRIBUTES NO_ARG_CHECK :: name
+real, dimension(*), target :: name
+

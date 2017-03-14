@@ -1,3 +1,5 @@
+#include "include_defines.fi"
+
 !===========================================
 !
 !===========================================
@@ -19,15 +21,13 @@ module qhashtbl_util_m
         subroutine qhashtbl_getdata_c(obj, val_data) bind(c)
             use iso_c_binding, only: c_ptr
             type(c_ptr), value :: obj
-            include "nocheck_val_data.fi"
-            real, dimension(*) :: val_data
+            type(c_ptr), value :: val_data
         end subroutine
 
         subroutine qhashtbl_getname_c(obj, name) bind(c)
             use iso_c_binding, only: c_ptr
             type(c_ptr), value :: obj
-            include "nocheck_name.fi"
-            real, dimension(*) :: name
+            type(c_ptr), value :: name
         end subroutine
 
         integer(c_size_t) function qhashtbl_getnamesize_c(obj) bind(c)
@@ -71,8 +71,7 @@ module qhashtbl_interface_m
             logical(c_bool) :: qhashtbl_put_c
             type(c_ptr), value :: tbl
             character(kind=c_char), dimension(*) :: name
-            include "nocheck_val_data.fi"
-            real, dimension(*)       :: val_data
+            type(c_ptr), value :: val_data
             integer(c_size_t), value :: size
         end function
 
@@ -282,8 +281,11 @@ contains
     subroutine qhashtbl_put(self, name, val_data, size_data, success)
         class(qhashtbl_t), intent(inout) :: self
         character(len=*), intent(in) :: name       !< key name.
-        include "nocheck_val_data.fi"
-        real, dimension(*), intent(in) :: val_data             !< data to put.
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*), target, intent(in) :: val_data   !< data to put
+#else
+#include "nocheck_val_data.fi"
+#endif
         integer, optional, intent(in)  :: size_data !< size of data object.
         logical, optional, intent(out) :: success  !< true if successful.
 
@@ -296,7 +298,7 @@ contains
             sd = self%size_data
         end if
 
-        suc_c = qhashtbl_put_c(self%q_cp, f_c_string(name), val_data, sd)
+        suc_c = qhashtbl_put_c(self%q_cp, f_c_string(name), c_loc(val_data), sd)
         if (present(success)) success = suc_c
     end subroutine
 
@@ -305,12 +307,12 @@ contains
     subroutine qhashtbl_putstr(self, name, str_data, success)
         class(qhashtbl_t), intent(inout) :: self
         character(len=*), intent(in)     :: name      !< key name.
-        character(len=*), intent(in)     :: str_data  !< string to put.
+        character(len=*), target, intent(in) :: str_data  !< string to put.
         logical, optional, intent(out)   :: success   !< true if successful.
 
         logical(c_bool) :: suc_c
 
-        suc_c = qhashtbl_put_c(self%q_cp, f_c_string(name), str_data, len(str_data, kind=c_size_t))
+        suc_c = qhashtbl_put_c(self%q_cp, f_c_string(name), c_loc(str_data), len(str_data, kind=c_size_t))
         if (present(success)) success = suc_c
     end subroutine
 
@@ -319,8 +321,11 @@ contains
     subroutine qhashtbl_get(self, name, val_data, found)
         class(qhashtbl_t), intent(in) :: self
         character(len=*), intent(in)  :: name  !< key name.
-        include "nocheck_val_data.fi"
-        real, dimension(*)   :: val_data       !< returned data.
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*), target :: val_data   !< returned data.
+#else
+#include "nocheck_val_data.fi"
+#endif
         logical, intent(out) :: found          !< true if key was found.
 
         integer(c_size_t), target :: size_data
@@ -331,7 +336,7 @@ contains
         size_data_p = c_loc(size_data)
         val_data_p = qhashtbl_get_c(self%q_cp, f_c_string(name), size_data_p, newmem)
         if (c_associated(val_data_p)) then
-            call qlibc_copy_data_c(val_data_p, val_data, size_data, newmem)
+            call qlibc_copy_data_c(val_data_p, c_loc(val_data), size_data, newmem)
             found = .true.
         else
             found = .false.
@@ -343,7 +348,7 @@ contains
     subroutine qhashtbl_getstr(self, name, str_data, found)
         class(qhashtbl_t), intent(in) :: self
         character(len=*), intent(in)  :: name  !< key name.
-        character(len=:), allocatable, intent(inout) :: str_data  !< returned string.
+        character(len=:), allocatable, target, intent(inout) :: str_data  !< returned string.
         logical, intent(out) :: found          !< true if key was found, else false.
 
         integer(c_size_t), target :: size_data
@@ -362,7 +367,7 @@ contains
             else
                 allocate(character(len=size_data) :: str_data)
             end if
-            call qlibc_copy_data_c(val_data_p, str_data, size_data, newmem)
+            call qlibc_copy_data_c(val_data_p, c_loc(str_data), size_data, newmem)
             found = .true.
         else
             found = .false.
@@ -494,17 +499,20 @@ contains
     !!
     subroutine qhashtbl_getdata(obj, val_data)
         class(qhashtbl_obj_t) :: obj
-        include "nocheck_val_data.fi"
-        real, dimension(*) :: val_data   !< returned data.
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*), target :: val_data   !< returned data.
+#else
+#include "nocheck_val_data.fi"
+#endif
 
-        call qhashtbl_getdata_c(obj%qobj, val_data)
+        call qhashtbl_getdata_c(obj%qobj, c_loc(val_data))
     end subroutine
 
     !> @brief Get name from the object.
     !!
     subroutine qhashtbl_getname(obj, name)
         class(qhashtbl_obj_t) :: obj
-        character(len=:), allocatable, intent(inout) :: name  !< returned name
+        character(len=:), allocatable, target, intent(inout) :: name  !< returned name
 
         integer(c_size_t) :: namesize
 
@@ -518,8 +526,12 @@ contains
             allocate(character(len=namesize) :: name)
         end if
 
-        call qhashtbl_getname_c(obj%qobj, name)
+        call qhashtbl_getname_c(obj%qobj, c_loc(name))
     end subroutine
 
 end module
 
+
+#ifdef USE_COMPILER_DIRECTIVE
+#undef USE_COMPILER_DIRECTIVE
+#endif

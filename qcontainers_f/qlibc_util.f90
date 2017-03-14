@@ -8,10 +8,7 @@ module qlibc_util_m
         subroutine qlibc_copy_data_c(val_data_from, val_data_to, size_data, freemem) bind(c)
             import :: c_ptr, c_size_t, c_bool
             type(c_ptr), value :: val_data_from
-            !GCC$ ATTRIBUTES NO_ARG_CHECK :: val_data_to
-            !DIR$ IGNORE_TKR val_data_to
-            !$PRAGMA IGNORE_TKR val_data_to
-            real                     :: val_data_to
+            type(c_ptr), value :: val_data_to
             integer(c_size_t), value :: size_data
             logical(c_bool), value   :: freemem
         end subroutine

@@ -2,3 +2,4 @@
 !DIR$ IGNORE_TKR val_data
 !$PRAGMA IGNORE_TKR val_data
 !DIR$ ATTRIBUTES NO_ARG_CHECK :: val_data
+real, dimension(*), target :: val_data

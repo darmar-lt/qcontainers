@@ -1,3 +1,6 @@
+
+#include "include_defines.fi"
+
 module qlist_util_m
 
     !*******************************************
@@ -16,8 +19,11 @@ module qlist_util_m
             use iso_c_binding, only: c_ptr, c_int, c_bool
             type(c_ptr), value :: list
             integer(c_int), value :: idx
-            include "nocheck_val_data.fi"
-            real, dimension(*) :: val_data
+#ifndef USE_COMPILER_DIRECTIVE
+            type(*) :: val_data
+#else
+#include "nocheck_val_data.fi"
+#endif
             logical(c_bool) :: suc
         end subroutine
 
@@ -26,8 +32,11 @@ module qlist_util_m
             use iso_c_binding, only: c_ptr, c_int, c_bool
             type(c_ptr), value :: list
             integer(c_int), value :: idx
-            include "nocheck_val_data.fi"
-            real, dimension(*) :: val_data
+#ifndef USE_COMPILER_DIRECTIVE
+            type(*) :: val_data
+#else
+#include "nocheck_val_data.fi"
+#endif
             logical(c_bool) :: suc
         end subroutine
 
@@ -35,8 +44,11 @@ module qlist_util_m
         subroutine qlist_toarray_c(list, val_data) bind(c)
             use iso_c_binding, only: c_ptr, c_int
             type(c_ptr), value  :: list
-            include "nocheck_val_data.fi"
-            real, dimension(*), intent(in) :: val_data
+#ifndef USE_COMPILER_DIRECTIVE
+            type(*), dimension(*) :: val_data
+#else
+#include "nocheck_val_data.fi"
+#endif
         end subroutine
     end interface
 
@@ -78,8 +90,11 @@ module qlist_obj_m
         subroutine qlist_getdata_c(obj, val_data) bind(c)
             import :: c_ptr
             type(c_ptr), value :: obj
-            include "nocheck_val_data.fi"
-            real, dimension(*) :: val_data
+#ifndef USE_COMPILER_DIRECTIVE
+            type(*) :: val_data
+#else
+#include "nocheck_val_data.fi"
+#endif
         end subroutine
     end interface
 
@@ -113,8 +128,11 @@ module qlist_interfaces_m
         logical(c_bool) function qlist_addfirst_c(list, val_data, size_data) bind(c, name="qlist_addfirst")
             use iso_c_binding, only: c_ptr, c_size_t, c_bool
             type(c_ptr), value       :: list
-            include "nocheck_val_data.fi"
-            real, dimension(*), intent(in) :: val_data
+#ifndef USE_COMPILER_DIRECTIVE
+            type(*) :: val_data
+#else
+#include "nocheck_val_data.fi"
+#endif
             integer(c_size_t), value :: size_data
         end function
 
@@ -122,8 +140,11 @@ module qlist_interfaces_m
         logical(c_bool) function qlist_addlast_c(list, val_data, size_data) bind(c, name="qlist_addlast")
             use iso_c_binding, only: c_ptr, c_size_t, c_bool
             type(c_ptr), value       :: list
-            include "nocheck_val_data.fi"
-            real, dimension(*), intent(in) :: val_data
+#ifndef USE_COMPILER_DIRECTIVE
+            type(*) :: val_data
+#else
+#include "nocheck_val_data.fi"
+#endif
             integer(c_size_t), value :: size_data
         end function
 
@@ -132,8 +153,11 @@ module qlist_interfaces_m
             use iso_c_binding, only: c_ptr, c_size_t, c_bool, c_int
             type(c_ptr), value       :: list
             integer(c_int), value    :: index
-            include "nocheck_val_data.fi"
-            real, dimension(*), intent(in) :: val_data
+#ifndef USE_COMPILER_DIRECTIVE
+            type(*) :: val_data
+#else
+#include "nocheck_val_data.fi"
+#endif
             integer(c_size_t), value :: size_data
         end function
 
@@ -312,8 +336,11 @@ contains
     !!
     subroutine qlist_addfirst(self, val_data, size_data, success)
         class(qlist_t), intent(inout) :: self
-        include "nocheck_val_data.fi"
-        real, dimension(*), intent(in) :: val_data   !< data to add
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*) :: val_data   !< data to add
+#else
+#include "nocheck_val_data.fi"
+#endif
         integer, optional, intent(in)  :: size_data  !< size of data object
         logical, optional, intent(out) :: success    !< true if successful
 
@@ -333,8 +360,11 @@ contains
     !!
     subroutine qlist_addlast(self, val_data, size_data, success)
         class(qlist_t), intent(inout) :: self
-        include "nocheck_val_data.fi"
-        real, dimension(*), intent(in) :: val_data   !< data to add
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*) :: val_data   !< data to add
+#else
+#include "nocheck_val_data.fi"
+#endif
         integer, optional, intent(in)  :: size_data  !< size of data object
         logical, optional, intent(out) :: success    !< true if successful
 
@@ -355,8 +385,11 @@ contains
     subroutine qlist_addat(self, idx, val_data, size_data, success)
         class(qlist_t), intent(inout) :: self
         integer, intent(in)           :: idx        !< at which index to insert (1-size). If idx<0, then idx=(size+idx+1).
-        include "nocheck_val_data.fi"
-        real, dimension(*), intent(in) :: val_data   !< data to add
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*) :: val_data   !< data to add
+#else
+#include "nocheck_val_data.fi"
+#endif
         integer, optional, intent(in)  :: size_data  !< size of data object
         logical, optional, intent(out) :: success    !< true if successful
 
@@ -414,8 +447,11 @@ contains
     !!
     subroutine qlist_getfirst(self, val_data, success)
         class(qlist_t), intent(in) :: self
-        include "nocheck_val_data.fi"
-        real, dimension(*) :: val_data             !< returned value
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*) :: val_data   !< returned value
+#else
+#include "nocheck_val_data.fi"
+#endif
         logical, optional, intent(out) :: success  !< returns .true. in case of success, .false. if error
 
         logical(c_bool) :: suc
@@ -428,8 +464,11 @@ contains
     !!
     subroutine qlist_getlast(self, val_data, success)
         class(qlist_t), intent(in) :: self
-        include "nocheck_val_data.fi"
-        real, dimension(*) :: val_data             !< returned value
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*) :: val_data   !< returned value
+#else
+#include "nocheck_val_data.fi"
+#endif
         logical, optional, intent(out) :: success  !< returns .true. in case of success, .false. if error
 
         logical(c_bool) :: suc
@@ -443,8 +482,11 @@ contains
     subroutine qlist_getat(self, idx, val_data, success)
         class(qlist_t), intent(in) :: self
         integer, intent(in)        :: idx          !< index at which the element should be returned (1-size). If idx<0, then idx=(size+idx+1)
-        include "nocheck_val_data.fi"
-        real, dimension(*) :: val_data             !< returned value
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*) :: val_data   !< returned value
+#else
+#include "nocheck_val_data.fi"
+#endif
         logical, optional, intent(out) :: success  !< returns .true. in case of success, .false. if error
 
         logical(c_bool) :: suc
@@ -468,8 +510,11 @@ contains
     !!
     subroutine qlist_popfirst(self, val_data, success)
         class(qlist_t), intent(in) :: self
-        include "nocheck_val_data.fi"
-        real, dimension(*) :: val_data             !< returned value
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*) :: val_data   !< returned value
+#else
+#include "nocheck_val_data.fi"
+#endif
         logical, optional, intent(out) :: success  !< returns .true. in case of success, .false. if error
 
         logical(c_bool) :: suc
@@ -482,8 +527,11 @@ contains
     !!
     subroutine qlist_poplast(self, val_data, success)
         class(qlist_t), intent(in) :: self
-        include "nocheck_val_data.fi"
-        real, dimension(*) :: val_data             !< returned value
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*) :: val_data   !< returned value
+#else
+#include "nocheck_val_data.fi"
+#endif
         logical, optional, intent(out) :: success  !< returns .true. in case of success, .false. if error
 
         logical(c_bool) :: suc
@@ -497,8 +545,11 @@ contains
     subroutine qlist_popat(self, idx, val_data, success)
         class(qlist_t), intent(in) :: self
         integer, intent(in)        :: idx          !< index at which the element should be returned and removed
-        include "nocheck_val_data.fi"
-        real, dimension(*) :: val_data             !< returned value
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*) :: val_data   !< returned value
+#else
+#include "nocheck_val_data.fi"
+#endif
         logical, optional, intent(out) :: success  !< returns .true. in case of success, .false. if error
 
         logical(c_bool) :: suc
@@ -599,8 +650,11 @@ contains
     !!
     subroutine qlist_toarray(self, val_data)
         class(qlist_t), intent(in) :: self
-        include "nocheck_val_data.fi"
-        real, dimension(*) :: val_data  !< return array which is filled with values. This array should be large enough to contain all values.
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*), dimension(*) :: val_data   !< return array which is filled with values. This array should be large enough to contain all values.
+#else
+#include "nocheck_val_data.fi"
+#endif
 
         call qlist_toarray_c(self%q_cp, val_data)
     end subroutine
@@ -690,10 +744,17 @@ contains
     !!
     subroutine qlist_getdata(obj, val_data)
         class(qlist_obj_t) :: obj
-        include "nocheck_val_data.fi"
-        real, dimension(*) :: val_data  !< return value
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*) :: val_data   !< return value
+#else
+#include "nocheck_val_data.fi"
+#endif
 
         call qlist_getdata_c(obj%qobj, val_data)
     end subroutine
 
 end module qlist_m
+
+#ifdef USE_COMPILER_DIRECTIVE
+#undef USE_COMPILER_DIRECTIVE
+#endif

@@ -1,3 +1,5 @@
+#include "include_defines.fi"
+
 !===========================================
 !
 !===========================================
@@ -19,15 +21,13 @@ module qtreetbl_util_m
         subroutine qtreetbl_getdata_c(obj, val_data) bind(c)
             use iso_c_binding, only: c_ptr
             type(c_ptr), value :: obj
-            include "nocheck_val_data.fi"
-            real, dimension(*) :: val_data
+            type(c_ptr), value :: val_data
         end subroutine
 
         subroutine qtreetbl_getname_c(obj, name) bind(c)
             use iso_c_binding, only: c_ptr
             type(c_ptr), value :: obj
-            include "nocheck_name.fi"
-            real, dimension(*) :: name
+            type(c_ptr), value :: name
         end subroutine
 
         integer(c_size_t) function qtreetbl_getnamesize_c(obj) bind(c)
@@ -38,8 +38,7 @@ module qtreetbl_util_m
         subroutine qtreetbl_find_nearest_c(tbl, name, namesize, newmem, obj, found) bind(c)
             use iso_c_binding, only: c_ptr, c_size_t, c_bool
             type(c_ptr), value :: tbl
-            include "nocheck_name.fi"
-            real, dimension(*) :: name
+            type(c_ptr), value :: name
             integer(c_size_t), value :: namesize
             logical(c_bool), value :: newmem
             type(c_ptr), value :: obj
@@ -77,16 +76,16 @@ module qtreetbl_interfaces_m
             use iso_c_binding, only:
         end subroutine
 
-        !bool qtreetbl_put(qtreetbl_t *tbl, const char *name, const void *data, size_t datasize);
-        function qtreetbl_put_c(tbl, name, val_data, datasize) bind(c, name="qtreetbl_put")
-            use iso_c_binding, only: c_bool, c_ptr, c_char, c_size_t
-            logical(c_bool) :: qtreetbl_put_c
-            type(c_ptr), value :: tbl
-            character(kind=c_char), dimension(*) :: name
-            include "nocheck_val_data.fi"
-            real, dimension(*)       :: val_data
-            integer(c_size_t), value :: datasize
-        end function
+!        !bool qtreetbl_put(qtreetbl_t *tbl, const char *name, const void *data, size_t datasize);
+!        function qtreetbl_put_c(tbl, name, val_data, datasize) bind(c, name="qtreetbl_put")
+!            use iso_c_binding, only: c_bool, c_ptr, c_char, c_size_t
+!            logical(c_bool) :: qtreetbl_put_c
+!            type(c_ptr), value :: tbl
+!            character(kind=c_char), dimension(*) :: name
+!            include "nocheck_val_data.fi"
+!            real, dimension(*)       :: val_data
+!            integer(c_size_t), value :: datasize
+!        end function
 
 !        !bool qtreetbl_putstr(qtreetbl_t *tbl, const char *name, const char *str);
 !        function qtreetbl_putstr(tbl, name, str) bind(c)
@@ -318,8 +317,11 @@ contains
     subroutine qtreetbl_put(self, name, val_data, size_data, success)
         class(qtreetbl_t), intent(inout) :: self
         character(len=*), target, intent(in) :: name !< key name.
-        include "nocheck_val_data.fi"
-        real, dimension(*), target, intent(in) :: val_data    !< data to put
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*), target, intent(in) :: val_data   !< data to put
+#else
+#include "nocheck_val_data.fi"
+#endif
         integer, optional, intent(in)  :: size_data   !< size of data object
         logical, optional, intent(out) :: success    !< true if successful
 
@@ -357,11 +359,17 @@ contains
     !!
     subroutine qtreetbl_put_by_obj(self, name, name_size, val_data, size_data, success)
         class(qtreetbl_t), intent(inout) :: self
-        include "nocheck_name.fi"
-        real, dimension(*), target, intent(in) :: name  !< key name.
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*), target, intent(in) :: name   !< key name.
+#else
+#include "nocheck_name.fi"
+#endif
         integer, intent(in) :: name_size                !< size of the name in bytes.
-        include "nocheck_val_data.fi"
-        real, dimension(*), target, intent(in) :: val_data  !< data to put.
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*), target, intent(in) :: val_data   !< data to put
+#else
+#include "nocheck_val_data.fi"
+#endif
         integer, optional, intent(in)  :: size_data !< size of data object.
         logical, optional, intent(out) :: success   !< true if successful.
 
@@ -383,8 +391,11 @@ contains
     subroutine qtreetbl_get(self, name, val_data, found)
         class(qtreetbl_t), intent(in) :: self
         character(len=*), target, intent(in) :: name  !< key name.
-        include "nocheck_val_data.fi"
-        real, dimension(*)   :: val_data              !< returned data.
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*), target :: val_data   !< returned data.
+#else
+#include "nocheck_val_data.fi"
+#endif
         logical, intent(out) :: found                 !< true if key was found.
 
         integer(c_size_t), target :: size_data
@@ -395,7 +406,7 @@ contains
         size_data_p = c_loc(size_data)
         val_data_p = qtreetbl_get_by_obj_c(self%q_cp, c_loc(name), len_trim(name, kind=c_size_t), size_data_p, newmem)
         if (c_associated(val_data_p)) then
-            call qlibc_copy_data_c(val_data_p, val_data, size_data, newmem)
+            call qlibc_copy_data_c(val_data_p, c_loc(val_data), size_data, newmem)
             found = .true.
         else
             found = .false.
@@ -407,7 +418,7 @@ contains
     subroutine qtreetbl_getstr(self, name, str_data, found)
         class(qtreetbl_t), intent(in) :: self
         character(len=*), target, intent(in)  :: name             !< key name.
-        character(len=:), allocatable, intent(inout) :: str_data  !< returned string.
+        character(len=:), allocatable, target, intent(inout) :: str_data  !< returned string.
         logical, intent(out) :: found                             !< true if key was found.
 
         integer(c_size_t), target :: size_data
@@ -426,7 +437,7 @@ contains
             else
                 allocate(character(len=size_data) :: str_data)
             end if
-            call qlibc_copy_data_c(val_data_p, str_data, size_data, newmem)
+            call qlibc_copy_data_c(val_data_p, c_loc(str_data), size_data, newmem)
             found = .true.
         else
             found = .false.
@@ -437,11 +448,17 @@ contains
     !!
     subroutine qtreetbl_get_by_obj(self, name, name_size, val_data, found)
         class(qtreetbl_t), intent(in) :: self
-        include "nocheck_name.fi"
-        real, dimension(*), target, intent(in) :: name   !< key name.
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*), target, intent(in) :: name   !< key name.
+#else
+#include "nocheck_name.fi"
+#endif
         integer, intent(in) :: name_size      !< size of the name in bytes.
-        include "nocheck_val_data.fi"
-        real, dimension(*)   :: val_data      !< returned data.
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*), target :: val_data   !< returned data.
+#else
+#include "nocheck_val_data.fi"
+#endif
         logical, intent(out) :: found         !< true if key was found.
 
         integer(c_size_t), target :: size_data
@@ -452,7 +469,7 @@ contains
         size_data_p = c_loc(size_data)
         val_data_p = qtreetbl_get_by_obj_c(self%q_cp, c_loc(name), int(name_size, kind=c_size_t), size_data_p, newmem)
         if (c_associated(val_data_p)) then
-            call qlibc_copy_data_c(val_data_p, val_data, size_data, newmem)
+            call qlibc_copy_data_c(val_data_p, c_loc(val_data), size_data, newmem)
             found = .true.
         else
             found = .false.
@@ -483,8 +500,11 @@ contains
     !!
     function qtreetbl_haskey_by_obj(self, name, name_size)
         class(qtreetbl_t), intent(in) :: self
-        include "nocheck_name.fi"
-        real, dimension(*), target, intent(in) :: name  !< key name.
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*), target, intent(in) :: name   !< key name.
+#else
+#include "nocheck_name.fi"
+#endif
         integer, intent(in) :: name_size     !< size of the name in bytes.
         logical :: qtreetbl_haskey_by_obj
 
@@ -518,8 +538,11 @@ contains
     !!
     subroutine qtreetbl_remove_by_obj(self, name, name_size, success)
         class(qtreetbl_t), intent(in) :: self
-        include "nocheck_name.fi"
-        real, dimension(*), target, intent(in) :: name !< key name.
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*), target, intent(in) :: name   !< key name.
+#else
+#include "nocheck_name.fi"
+#endif
         integer, intent(in) :: name_size           !< size of the name in bytes.
         logical, optional, intent(out) :: success  !< true if successful.
 
@@ -548,8 +571,8 @@ contains
     !!
     subroutine qtreetbl_find_min(self, name, found)
         class(qtreetbl_t), intent(in) :: self
-        character(len=:), allocatable, intent(inout) :: name !< found key name.
-        logical, intent(out) :: found                        !< true if name was found.
+        character(len=:), allocatable, target, intent(inout) :: name !< found key name.
+        logical, intent(out) :: found                                !< true if name was found.
 
         integer(c_size_t), target :: namesize
         type(c_ptr) :: namec_p
@@ -565,7 +588,7 @@ contains
             else
                 allocate(character(len=namesize) :: name)
             end if
-            call qlibc_copy_data_c(namec_p, name, namesize, freemem)
+            call qlibc_copy_data_c(namec_p, c_loc(name), namesize, freemem)
             found = .true.
         else
             found = .false.
@@ -576,8 +599,11 @@ contains
     !!
     subroutine qtreetbl_find_min_by_obj(self, name, found)
         class(qtreetbl_t), intent(in) :: self
-        include "nocheck_name.fi"
-        real, dimension(*), intent(inout)  :: name   !< found key name
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*), target, intent(inout) :: name   !< found key name
+#else
+#include "nocheck_name.fi"
+#endif
         logical, intent(out) :: found    !< true if found
 
         integer(c_size_t), target :: namesize
@@ -586,7 +612,7 @@ contains
 
         namec_p = qtreetbl_find_min_c(self%q_cp, c_loc(namesize))
         if (c_associated(namec_p)) then
-            call qlibc_copy_data_c(namec_p, name, namesize, freemem)
+            call qlibc_copy_data_c(namec_p, c_loc(name), namesize, freemem)
             found = .true.
         else
             found = .false.
@@ -597,8 +623,8 @@ contains
     !!
     subroutine qtreetbl_find_max(self, name, found)
         class(qtreetbl_t), intent(in) :: self
-        character(len=:), allocatable, intent(inout) :: name !< found key name
-        logical, intent(out) :: found                        !< true if found
+        character(len=:), allocatable, target, intent(inout) :: name !< found key name
+        logical, intent(out) :: found                                !< true if found
 
         integer(c_size_t), target :: namesize
         type(c_ptr) :: namec_p
@@ -614,7 +640,7 @@ contains
             else
                 allocate(character(len=namesize) :: name)
             end if
-            call qlibc_copy_data_c(namec_p, name, namesize, freemem)
+            call qlibc_copy_data_c(namec_p, c_loc(name), namesize, freemem)
             found = .true.
         else
             found = .false.
@@ -625,8 +651,11 @@ contains
     !!
     subroutine qtreetbl_find_max_by_obj(self, name, found)
         class(qtreetbl_t), intent(in) :: self
-        include "nocheck_name.fi"
-        real, dimension(*), intent(inout)  :: name  !< found key name
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*), target, intent(inout) :: name   !< found key name
+#else
+#include "nocheck_name.fi"
+#endif
         logical, intent(out) :: found   !< true if found
 
         integer(c_size_t), target :: namesize
@@ -635,7 +664,7 @@ contains
 
         namec_p = qtreetbl_find_max_c(self%q_cp, c_loc(namesize))
         if (c_associated(namec_p)) then
-            call qlibc_copy_data_c(namec_p, name, namesize, freemem)
+            call qlibc_copy_data_c(namec_p, c_loc(name), namesize, freemem)
             found = .true.
         else
             found = .false.
@@ -646,8 +675,11 @@ contains
     !!
     subroutine qtreetbl_find_nearest(self, name, namesize, obj, found)
         class(qtreetbl_t), intent(in) :: self
-        include "nocheck_name.fi"
-        real, dimension(*), intent(inout) :: name   !< key name
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*), target, intent(inout) :: name   !< key name
+#else
+#include "nocheck_name.fi"
+#endif
         integer(c_size_t), target :: namesize       !< size of the name
         type(qtreetbl_obj_t), intent(inout) :: obj  !< found object
         logical, optional, intent(out) :: found     !> true if found
@@ -660,7 +692,7 @@ contains
             call qtreetbl_objinit(obj)
         end if
 
-        call qtreetbl_find_nearest_c(self%q_cp, name, namesize, newmem, obj%qobj, cfound)
+        call qtreetbl_find_nearest_c(self%q_cp, c_loc(name), namesize, newmem, obj%qobj, cfound)
         if (cfound) then
             if (present(found)) found = .true.
         else
@@ -751,17 +783,20 @@ contains
     !!
     subroutine qtreetbl_getdata(obj, val_data)
         class(qtreetbl_obj_t) :: obj
-        include "nocheck_val_data.fi"
-        real, dimension(*) :: val_data    !< returned data
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*), target, intent(inout) :: val_data   !< returned data
+#else
+#include "nocheck_val_data.fi"
+#endif
 
-        call qtreetbl_getdata_c(obj%qobj, val_data)
+        call qtreetbl_getdata_c(obj%qobj, c_loc(val_data))
     end subroutine
 
     !> @brief Get name from the object.
     !!
     subroutine qtreetbl_getname(obj, name)
         class(qtreetbl_obj_t) :: obj
-        character(len=:), allocatable, intent(inout) :: name  !< returned name
+        character(len=:), allocatable, target, intent(inout) :: name  !< returned name
 
         integer(c_size_t) :: namesize
 
@@ -775,17 +810,24 @@ contains
             allocate(character(len=namesize) :: name)
         end if
 
-        call qtreetbl_getname_c(obj%qobj, name)
+        call qtreetbl_getname_c(obj%qobj, c_loc(name))
     end subroutine
 
     !> @brief Get name from the object.
     !!
     subroutine qtreetbl_getname_by_obj(obj, name)
         class(qtreetbl_obj_t) :: obj
-        include "nocheck_name.fi"
-        real, dimension(*), intent(inout) :: name   !< returned name
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*), target, intent(inout) :: name   !< returned name
+#else
+#include "nocheck_name.fi"
+#endif
 
-        call qtreetbl_getname_c(obj%qobj, name)
+        call qtreetbl_getname_c(obj%qobj, c_loc(name))
     end subroutine
 
 end module qtreetbl_m
+
+#ifdef USE_COMPILER_DIRECTIVE
+#undef USE_COMPILER_DIRECTIVE
+#endif

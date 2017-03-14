@@ -1,0 +1,3 @@
+#if defined __PGI || defined __SUNPRO_F95
+#define USE_COMPILER_DIRECTIVE 
+#endif

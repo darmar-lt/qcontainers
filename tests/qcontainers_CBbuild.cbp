@@ -166,7 +166,7 @@
 			<Option target="qcont_c_PGI" />
 			<Option target="qcont_c_Oracle" />
 		</Unit>
-		<Unit filename="../qcontainers_f/qhashtbl.f90">
+		<Unit filename="../qcontainers_f/qhashtbl.F90">
 			<Option weight="1" />
 			<Option target="Tests" />
 			<Option target="Tests_PGI" />
@@ -178,19 +178,19 @@
 			<Option target="Tests_PGI" />
 			<Option target="Tests_Oracle" />
 		</Unit>
-		<Unit filename="../qcontainers_f/qlist.f90">
+		<Unit filename="../qcontainers_f/qlist.F90">
 			<Option weight="1" />
 			<Option target="Tests" />
 			<Option target="Tests_PGI" />
 			<Option target="Tests_Oracle" />
 		</Unit>
-		<Unit filename="../qcontainers_f/qtreetbl.f90">
+		<Unit filename="../qcontainers_f/qtreetbl.F90">
 			<Option weight="1" />
 			<Option target="Tests" />
 			<Option target="Tests_PGI" />
 			<Option target="Tests_Oracle" />
 		</Unit>
-		<Unit filename="../qcontainers_f/qvector.f90">
+		<Unit filename="../qcontainers_f/qvector.F90">
 			<Option weight="1" />
 			<Option target="Tests" />
 			<Option target="Tests_PGI" />
@@ -254,7 +254,7 @@
 			<Option target="Tests_PGI" />
 			<Option target="Tests_Oracle" />
 		</Unit>
-		<Unit filename="test_hashtbl.f90">
+		<Unit filename="test_hashtbl.F90">
 			<Option weight="2" />
 			<Option target="Tests" />
 			<Option target="Tests_PGI" />
