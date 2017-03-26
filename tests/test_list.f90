@@ -50,7 +50,7 @@ subroutine test_qlist_2()
     type(qlist_t) :: list
 
     integer :: i, isiz, imax=5
-    real(8) :: v, vback
+    double precision :: v, vback
     type(qlist_obj_t) :: obj
 
     print *, ""
@@ -87,7 +87,7 @@ subroutine test_qlist_3()
 
     type test_t
         integer :: id
-        real(8) :: a
+        double precision :: a
     end type
 
     type(qlist_t) :: list
@@ -130,7 +130,7 @@ subroutine test_qlist_4()
 
     type test_t
         integer :: id
-        real(8), allocatable :: arr(:)
+        double precision, allocatable :: arr(:)
     end type
 
     type(qlist_t) :: list

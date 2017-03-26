@@ -80,7 +80,7 @@ contains
     end subroutine
 
     subroutine assert_equal_double(val1, val2)
-        real(8), intent(in) :: val1, val2
+        double precision, intent(in) :: val1, val2
 
         if (val1 == val2) then
             assert_nok = assert_nok + 1
