@@ -15,11 +15,11 @@ Following containers are implemented currently:
     * Vector (qvector) --- implements a growable array of elements.
 
 
-The library uses some features of Fortran 2003, therefore, a relatively new
-compiler version is required. Compiler directives, like NO_ARG_CHECK in case 
-of Gfortran, are used to enable storing of any type to the containers.
-The containers were tested with Gfortran, Intel, PGI and Oracle Fortran 
-compilers.
+The library uses some features of Fortran 2003 and TS-29113, therefore, a relatively new
+compiler version is required. Assumed-type dummy arguments or compiler directives in
+the case the compiler doesn't support assumed-type variables are used to enable store 
+of any type to the containers.
+The containers were tested with Gfortran, Intel, PGI and Oracle Fortran compilers.
 
 ## License
 
@@ -46,6 +46,7 @@ An example below illustrates how it looks like.
         logical :: found
 
         ! Determine the size in bytes we need to save
+        ! ns is a number of bytes for 3 integers
         ns = storage_size(val) / 8 * size(val)
 
         ! Create a new tree-table
@@ -53,13 +54,13 @@ An example below illustrates how it looks like.
         
         ! Put some values
         val = [255, 0, 0]
-        call col%put("red", val)
+        call col%put("red", val(1)) ! ns bytes from val is copied
         val = [0, 255, 0]
-        call col%put("green", val)
+        call col%put("green", val(1))
         !.........
 
         ! Retrieve value
-        call col%get("red", ret_val, found)
+        call col%get("red", ret_val(1), found)
         print *, "red color = ", ret_val
     end subroutine
 ~~~

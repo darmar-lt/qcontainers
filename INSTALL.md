@@ -20,21 +20,23 @@ Perform Configure and Generate.
 3) Run `make` in the build directory in the terminal (cmd on Windows) 
 to compile the source code. In case of Windows (not for MinGW), CMake will 
 generate Visual Studio project. Open Visual Studio and compile the project.
-In case of success, the directory 'lib' will be created which contains
-the static library 'libqcontainers.a' or 'libqcontainers.lib'.
+In case of success, the directory 'lib' (<qcontainers_dir>/lib) will be 
+created which contains the static library 'libqcontainers.a' or 
+'libqcontainers.lib'.
 
 
 ## Use of the library in a Fortran project
 
 Copy files from directory 'qcontainers_f' somewhere into your project. 
-These files should be compiled together with your other Fortran files. 
-Point your project to the compiled static library 'libqcontainers.a' 
-during the linking step.
+These files should be compiled together with your other Fortran files.
+The files in 'qcontainers_f' should be preprocessed. Thefore, add
+required compiler option e.g. -cpp for the Gfortran. Point your project 
+to the compiled static library 'libqcontainers.a' during the linking step.
 
 
 ## Tests
 
-The qContainers library comes with rother extensive test-cases contained in
+The qContainers library comes with rather extensive test-cases contained in
 'tests' directory. Files 'test_*.f90' can also be used for learning how to use
 the containers. The tests can be build using Code::Blocks IDE project file 
 'qcontainers.cbp'. The project 'qcontainers_CBbuild.cbp' can be used to compile 
