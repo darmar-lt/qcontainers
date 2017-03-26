@@ -127,6 +127,7 @@ end subroutine
 subroutine test_qlist_4()
     use qlist_m
     use assert_test_m
+    use iso_c_binding, only: c_ptr, c_loc, c_f_pointer
 
     type test_t
         integer :: id
@@ -136,13 +137,15 @@ subroutine test_qlist_4()
     type(qlist_t) :: list
     integer :: isiz, i, nelem
     type(test_t), pointer :: vp
-    type(test_t), allocatable :: varr(:)
+    type(test_t), pointer :: vp_ret
+    type(c_ptr) :: cp
+    type(c_ptr), allocatable :: cparr(:)
     logical :: isalloc
 
     print *, ""
     print *, "Start of test_qlist_4"
 
-    isiz = storage_size(vp) / 8
+    isiz = storage_size(cp) / 8
     call list%new(isiz)
 
     print *, 'isiz=', isiz
@@ -151,22 +154,27 @@ subroutine test_qlist_4()
         allocate(vp%arr(i))
         vp%id = i
         vp%arr(:) = i*10
+        cp = c_loc(vp)
 
-        call list%addlast(vp)
+        call list%addlast(cp)
     end do
 
     nelem = list%size()
     call assert_equal(nelem, 5)
 
-    allocate(varr(nelem))
-    call list%toarray(varr)
+    allocate(cparr(nelem))
+    call list%toarray(cparr)
 
     do i = 1, nelem
-        call assert_equal(varr(i)%id, i)
-        isalloc = allocated(varr(i)%arr)
+        call c_f_pointer(cparr(i), vp_ret)
+        call assert_equal(vp_ret%id, i)
+        isalloc = allocated(vp_ret%arr)
         call assert_true(isalloc)
-        call assert_equal(size(varr(i)%arr), i)
-        call assert_equal(varr(i)%arr(i), real(i*10,kind=8))
+        call assert_equal(size(vp_ret%arr), i)
+        call assert_equal(vp_ret%arr(i), i*10.d0)
+
+        ! Free allocated memory
+        deallocate(vp_ret)
     end do
 end subroutine
 
@@ -234,72 +242,6 @@ subroutine test_qlist_6()
 end subroutine
 
 
-
-subroutine test_qlist_7()
-    use assert_test_m
-    use qlist_m
-    use iso_c_binding
-    implicit none
-
-    type values
-        real, allocatable :: x(:)
-        integer :: nv
-    end type
-
-    type(qlist_t) :: list
-    integer :: isiz
-    integer :: i, j
-    integer :: nv
-    type(values), pointer :: res
-    type(c_ptr) :: lp
-
-    type(qlist_obj_t) :: obj
-
-    print *, ""
-    print *, "Start of test_qlist_7"
-
-    isiz = storage_size(lp) / 8
-    call list%new(isiz)
-
-    do j = 1, 3
-        nv = 5 * j
-        allocate(res)       ! allocate pointer
-        allocate(res%x(nv))
-        do i = 1, nv
-            res%x(i) = i * 100.
-        end do
-        res%nv = nv
-
-        lp = c_loc(res)
-        call list%addlast(lp)
-    end do
-
-    call list%getat(1, lp)
-    call c_f_pointer(lp, res)
-    call assert_equal(res%nv, 5)
-    call assert_equal(res%x(5), 5.*100.)
-
-    call list%getat(3, lp)
-    call c_f_pointer(lp, res)
-    call assert_equal(res%nv, 15)
-    call assert_equal(res%x(1), 1.*100.)
-    call assert_equal(res%x(15), 15.*100.)
-
-    ! Destructor of qlist will not free the memory allocated for Fortran pointer.
-    ! User is self responsible to free memory allocated for the pointers of values.
-    i = 0
-    call obj%init()
-    do while (list%getnext(obj))
-        call obj%getdata(lp)
-        call c_f_pointer(lp, res)
-
-        i = i + 1
-        call assert_equal(res%nv, i * 5)
-
-        deallocate(res)
-    end do
-end subroutine
-
 subroutine testing_qlist()
     use assert_test_m
     implicit none
@@ -314,7 +256,6 @@ subroutine testing_qlist()
     call test_qlist_4()
     call test_qlist_5()
     call test_qlist_6()
-    call test_qlist_7()
 
     call assert_print_summary()
 end subroutine
