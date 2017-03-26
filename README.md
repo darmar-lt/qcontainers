@@ -71,7 +71,7 @@ Read INSTALL.md file.
 
 ## Documentation
 
-There is no separate documentation available currently. However, the library has 
+An introduction tutorial can be found in docs folder. Also, the library has 
 rather extensive test-cases from which users can learn how to use the library.
 
 ## Contribution
