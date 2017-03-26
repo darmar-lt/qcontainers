@@ -29,6 +29,7 @@
 				<Option compiler="gfortran" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-cpp" />
 					<Add option="-Wall" />
 				</Compiler>
 				<Linker>

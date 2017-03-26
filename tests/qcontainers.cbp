@@ -14,6 +14,7 @@
 				<Option compiler="gfortran" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-cpp" />
 					<Add option="-Wall" />
 				</Compiler>
 				<Linker>
@@ -50,38 +51,28 @@
 				</Linker>
 			</Target>
 		</Build>
-		<Unit filename="../qcontainers_f/qhashtbl.f90">
-			<Option weight="1" />
-		</Unit>
+		<Unit filename="../qcontainers_f/qhashtbl.F90" />
 		<Unit filename="../qcontainers_f/qlibc_util.f90">
 			<Option weight="0" />
 		</Unit>
-		<Unit filename="../qcontainers_f/qlist.f90">
-			<Option weight="1" />
-		</Unit>
-		<Unit filename="../qcontainers_f/qtreetbl.f90">
-			<Option weight="1" />
-		</Unit>
-		<Unit filename="../qcontainers_f/qvector.f90">
-			<Option weight="1" />
-		</Unit>
+		<Unit filename="../qcontainers_f/qlist.F90" />
+		<Unit filename="../qcontainers_f/qtreetbl.F90" />
+		<Unit filename="../qcontainers_f/qvector.F90" />
 		<Unit filename="assert_test.f90">
 			<Option weight="0" />
 		</Unit>
-		<Unit filename="test_hashtbl.f90">
-			<Option weight="2" />
-		</Unit>
+		<Unit filename="test_hashtbl.F90" />
 		<Unit filename="test_list.f90">
-			<Option weight="2" />
+			<Option weight="1" />
 		</Unit>
 		<Unit filename="test_qcontainers.f90">
 			<Option weight="1" />
 		</Unit>
 		<Unit filename="test_treetbl.f90">
-			<Option weight="2" />
+			<Option weight="1" />
 		</Unit>
 		<Unit filename="test_vector.f90">
-			<Option weight="2" />
+			<Option weight="1" />
 		</Unit>
 		<Extensions>
 			<envvars />
