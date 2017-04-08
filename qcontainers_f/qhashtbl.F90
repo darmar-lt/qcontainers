@@ -75,24 +75,6 @@ module qhashtbl_interface_m
             integer(c_size_t), value :: size
         end function
 
-!        !bool qhashtbl_putstr(qhashtbl_t *tbl, const char *name, const char *str);
-!        function qhashtbl_putstr(tbl, name, str) bind(c)
-!            use iso_c_binding, only: c_bool, c_ptr, c_char
-!            logical(c_bool) :: qhashtbl_putstr
-!            type(c_ptr), value :: tbl
-!            character(kind=c_char), dimension(*) :: name
-!            character(kind=c_char), dimension(*) :: str
-!        end function
-
-!        !bool qhashtbl_putint(qhashtbl_t *tbl, const char *name, int64_t num);
-!        function qhashtbl_putint(tbl, name, num) bind(c)
-!            use iso_c_binding, only: c_bool, c_ptr, c_char
-!            logical(c_bool) :: qhashtbl_putint
-!            type(c_ptr), value :: tbl
-!            character(kind=c_char), dimension(*) :: name
-!            integer(int64_t), value :: num
-!        end function
-
         !void *qhashtbl_get(qhashtbl_t *tbl, const char *name, size_t *size, bool newmem);
         function qhashtbl_get_c(tbl, name, size, newmem) bind(c,name="qhashtbl_get")
             use iso_c_binding, only: c_ptr, c_char, c_bool
@@ -102,23 +84,6 @@ module qhashtbl_interface_m
             type(c_ptr), value :: size
             logical(c_bool), value :: newmem
         end function
-
-!        !char *qhashtbl_getstr(qhashtbl_t *tbl, const char *name, bool newmem);
-!        function qhashtbl_getstr(tbl, name, newmem) bind(c)
-!            use iso_c_binding, only: c_ptr, c_char, c_bool
-!            type(c_ptr) :: qhashtbl_getstr
-!            type(c_ptr), value :: tbl
-!            character(kind=c_char), dimension(*) :: name
-!            logical(c_bool), value :: newmem
-!        end function
-
-!        !int64_t qhashtbl_getint(qhashtbl_t *tbl, const char *name);
-!        function qhashtbl_getint(tbl, name) bind(c)
-!            use iso_c_binding, only: int64_t, c_ptr, c_char
-!            integer(int64_t) :: qhashtbl_getint
-!            type(c_ptr), value :: tbl
-!            character(kind=c_char), dimension(*) :: name
-!        end function
 
         !bool qhashtbl_remove(qhashtbl_t *tbl, const char *name);
         function qhashtbl_remove_c(tbl, name) bind(c,name="qhashtbl_remove")
@@ -150,26 +115,6 @@ module qhashtbl_interface_m
             type(c_ptr), value :: tbl
         end subroutine
 
-!        !bool qhashtbl_debug(qhashtbl_t *tbl, FILE *out);
-!        function qhashtbl_debug(tbl, out) bind(c)
-!            use iso_c_binding, only: c_bool, c_ptr
-!            logical(c_bool) :: qhashtbl_debug
-!            type(c_ptr), value :: tbl
-!            type(c_ptr), value :: out
-!        end function
-
-!        !void qhashtbl_lock(qhashtbl_t *tbl);
-!        subroutine qhashtbl_lock(tbl) bind(c)
-!            use iso_c_binding, only: c_ptr
-!            type(c_ptr), value :: tbl
-!        end subroutine
-!
-!        !void qhashtbl_unlock(qhashtbl_t *tbl);
-!        subroutine qhashtbl_unlock(tbl) bind(c)
-!            use iso_c_binding, only: c_ptr
-!            type(c_ptr), value :: tbl
-!        end subroutine
-
         !void qhashtbl_free(qhashtbl_t *tbl);
         subroutine qhashtbl_free_c(tbl) bind(c, name="qhashtbl_free")
             use iso_c_binding, only: c_ptr
@@ -200,16 +145,16 @@ module qhashtbl_m
         ! variable wasInit is used as a workaround.
     contains
         final :: qhashtbl_free
-        procedure :: new => qhashtbl_new
-        procedure :: put => qhashtbl_put
-        procedure :: putstr => qhashtbl_putstr
-        procedure :: get => qhashtbl_get
-        procedure :: getstr => qhashtbl_getstr
-        procedure :: haskey => qhashtbl_haskey
-        procedure :: remove => qhashtbl_remove
-        procedure :: size => qhashtbl_size
-        procedure :: getnext => qhashtbl_getnext
-        procedure :: clear => qhashtbl_clear
+        procedure :: new => qhashtbl_new          !< Constructor of the container. Should be called before the use.
+        procedure :: put => qhashtbl_put          !< Put key-value pair to the container.
+        procedure :: putstr => qhashtbl_putstr    !< Put string to the container.
+        procedure :: get => qhashtbl_get          !< Get data.
+        procedure :: getstr => qhashtbl_getstr    !< Get character data.
+        procedure :: haskey => qhashtbl_haskey    !< Return if the key is in the container.
+        procedure :: remove => qhashtbl_remove    !< Remove key from the container.
+        procedure :: size => qhashtbl_size        !< Get current size (number of pairs) in the container.
+        procedure :: getnext => qhashtbl_getnext  !< Get next object.
+        procedure :: clear => qhashtbl_clear      !< Remove all values from the container.
     end type
 
     ! Type describes a one object of the qhashtbl

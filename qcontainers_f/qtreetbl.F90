@@ -76,26 +76,6 @@ module qtreetbl_interfaces_m
             use iso_c_binding, only:
         end subroutine
 
-!        !bool qtreetbl_put(qtreetbl_t *tbl, const char *name, const void *data, size_t datasize);
-!        function qtreetbl_put_c(tbl, name, val_data, datasize) bind(c, name="qtreetbl_put")
-!            use iso_c_binding, only: c_bool, c_ptr, c_char, c_size_t
-!            logical(c_bool) :: qtreetbl_put_c
-!            type(c_ptr), value :: tbl
-!            character(kind=c_char), dimension(*) :: name
-!            include "nocheck_val_data.fi"
-!            real, dimension(*)       :: val_data
-!            integer(c_size_t), value :: datasize
-!        end function
-
-!        !bool qtreetbl_putstr(qtreetbl_t *tbl, const char *name, const char *str);
-!        function qtreetbl_putstr(tbl, name, str) bind(c)
-!            use iso_c_binding, only: c_bool, c_ptr, c_char
-!            logical(c_bool) :: qtreetbl_putstr
-!            type(c_ptr), value :: tbl
-!            character(kind=c_char), dimension(*) :: name
-!            character(kind=c_char), dimension(*) :: str
-!        end function
-
         !bool qtreetbl_put_by_obj(qtreetbl_t *tbl, const void *name, size_t namesize, const void *data, size_t datasize);
         function qtreetbl_put_by_obj_c(tbl, name, namesize, data, datasize) bind(c,name="qtreetbl_put_by_obj")
             use iso_c_binding, only: c_bool, c_ptr, c_size_t
@@ -117,15 +97,6 @@ module qtreetbl_interfaces_m
             logical(c_bool), value :: newmem
         end function
 
-!        !char *qtreetbl_getstr(qtreetbl_t *tbl, const char *name, const bool newmem);
-!        function qtreetbl_getstr(tbl, name, newmem) bind(c)
-!            use iso_c_binding, only: c_ptr, c_char, c_bool
-!            type(c_ptr) :: qtreetbl_getstr
-!            type(c_ptr), value :: tbl
-!            character(kind=c_char), dimension(*) :: name
-!            logical(c_bool), value :: newmem
-!        end function
-
         !void *qtreetbl_get_by_obj(qtreetbl_t *tbl, const char *name, size_t namesize, size_t *datasize, bool newmem);
         function qtreetbl_get_by_obj_c(tbl, name, namesize, datasize, newmem) bind(c, name="qtreetbl_get_by_obj")
             use iso_c_binding, only: c_ptr, c_char, c_size_t, c_bool
@@ -137,14 +108,6 @@ module qtreetbl_interfaces_m
             type(c_ptr), value :: datasize
             logical(c_bool), value :: newmem
         end function
-
-!        !bool qtreetbl_remove(qtreetbl_t *tbl, const char *name);
-!        function qtreetbl_remove(tbl, name) bind(c)
-!            use iso_c_binding, only: c_bool, c_ptr, c_char
-!            logical(c_bool) :: qtreetbl_remove
-!            type(c_ptr), value :: tbl
-!            character(kind=c_char), dimension(*) :: name
-!        end function
 
         !bool qtreetbl_remove_by_obj(qtreetbl_t *tbl, const void *name, size_t namesize);
         function qtreetbl_remove_by_obj_c(tbl, name, namesize) bind(c, name="qtreetbl_remove_by_obj")
@@ -194,18 +157,6 @@ module qtreetbl_interfaces_m
             type(c_ptr), value :: tbl
         end subroutine
 
-!        !void qtreetbl_lock(qtreetbl_t *tbl);
-!        subroutine qtreetbl_lock_c(tbl) bind(c, name="qtreetbl_lock")
-!            use iso_c_binding, only: c_ptr
-!            type(c_ptr), value :: tbl
-!        end subroutine
-!
-!        !void qtreetbl_unlock(qtreetbl_t *tbl);
-!        subroutine qtreetbl_unlock_c(tbl) bind(c, name="qtreetbl_unlock")
-!            use iso_c_binding, only: c_ptr
-!            type(c_ptr), value :: tbl
-!        end subroutine
-
         !void qtreetbl_free(qtreetbl_t *tbl);
         subroutine qtreetbl_free_c(tbl) bind(c, name="qtreetbl_free")
             use iso_c_binding, only: c_ptr
@@ -232,25 +183,25 @@ module qtreetbl_m
         logical :: was_init = .false.
     contains
         final :: qtreetbl_free
-        procedure :: new => qtreetbl_new                             ! Constructor of the container. Should be called before use of the container.
-        procedure :: clear => qtreetbl_clear                         ! Remove all values from the tree.
-        procedure :: find_max => qtreetbl_find_max                   ! Find the name of very right object.
-        procedure :: find_max_by_obj => qtreetbl_find_max_by_obj     ! Find the name of very right object.
-        procedure :: find_min => qtreetbl_find_min                   ! Find the name of very left object.
-        procedure :: find_min_by_obj => qtreetbl_find_min_by_obj     ! Find the name of very left object.
-        procedure :: find_nearest => qtreetbl_find_nearest           ! Find nearest object to the given name.
-        procedure :: get => qtreetbl_get                             ! Get data.
-        procedure :: get_by_obj => qtreetbl_get_by_obj               ! Get data.
-        procedure :: getnext => qtreetbl_getnext                     ! Get next object.
-        procedure :: getstr => qtreetbl_getstr                       ! Get string data.
-        procedure :: haskey => qtreetbl_haskey                       ! Return if the key is in the container.
-        procedure :: haskey_by_obj => qtreetbl_haskey_by_obj         ! Return if the key is in the container.
-        procedure :: put => qtreetbl_put                             ! Put key-value pair to the container.
-        procedure :: put_by_obj => qtreetbl_put_by_obj               ! Put key-value pair to the container.
-        procedure :: putstr => qtreetbl_putstr                       ! Put string to the container.
-        procedure :: remove => qtreetbl_remove                       ! Remove key from the container.
-        procedure :: remove_by_obj => qtreetbl_remove_by_obj         ! Remove key from the container.
-        procedure :: size => qtreetbl_size                           ! Get current size (number of pairs) in the container.
+        procedure :: new => qtreetbl_new                             !< Constructor of the container. Should be called before use of the container.
+        procedure :: clear => qtreetbl_clear                         !< Remove all values from the tree.
+        procedure :: find_max => qtreetbl_find_max                   !< Find the name of very right object.
+        procedure :: find_max_by_obj => qtreetbl_find_max_by_obj     !< Find the name of very right object.
+        procedure :: find_min => qtreetbl_find_min                   !< Find the name of very left object.
+        procedure :: find_min_by_obj => qtreetbl_find_min_by_obj     !< Find the name of very left object.
+        procedure :: find_nearest => qtreetbl_find_nearest           !< Find nearest object to the given name.
+        procedure :: get => qtreetbl_get                             !< Get data.
+        procedure :: get_by_obj => qtreetbl_get_by_obj               !< Get data.
+        procedure :: getnext => qtreetbl_getnext                     !< Get next object.
+        procedure :: getstr => qtreetbl_getstr                       !< Get string data.
+        procedure :: haskey => qtreetbl_haskey                       !< Return if the key is in the container.
+        procedure :: haskey_by_obj => qtreetbl_haskey_by_obj         !< Return if the key is in the container.
+        procedure :: put => qtreetbl_put                             !< Put key-value pair to the container.
+        procedure :: put_by_obj => qtreetbl_put_by_obj               !< Put key-value pair to the container.
+        procedure :: putstr => qtreetbl_putstr                       !< Put string to the container.
+        procedure :: remove => qtreetbl_remove                       !< Remove key from the container.
+        procedure :: remove_by_obj => qtreetbl_remove_by_obj         !< Remove key from the container.
+        procedure :: size => qtreetbl_size                           !< Get current size (number of pairs) in the container.
     end type
 
     ! Type describes a one object of the treetbl

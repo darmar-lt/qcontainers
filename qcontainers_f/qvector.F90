@@ -75,22 +75,6 @@ module qvector_interfaces_m
             type(c_ptr), value :: data
         end function
 
-!        !void *qvector_getfirst(qvector_t *vector, bool newmem);
-!        function qvector_getfirst_c(vector, newmem) bind(c, name="qvector_getfirst")
-!            use iso_c_binding, only: c_ptr, c_bool
-!            type(c_ptr) :: qvector_getfirst_c
-!            type(c_ptr), value :: vector
-!            logical(c_bool), value :: newmem
-!        end function
-!
-!        !void *qvector_getlast(qvector_t *vector, bool newmem);
-!        function qvector_getlast_c(vector, newmem) bind(c, name="qvector_getlast")
-!            use iso_c_binding, only: c_ptr, c_bool
-!            type(c_ptr) :: qvector_getlast_c
-!            type(c_ptr), value :: vector
-!            logical(c_bool), value :: newmem
-!        end function
-
         !void *qvector_getat(qvector_t *vector, int index, bool newmem);
         function qvector_getat_c(vector, index, newmem) bind(c, name="qvector_getat")
             use iso_c_binding, only: c_ptr, c_int, c_bool
@@ -99,22 +83,6 @@ module qvector_interfaces_m
             integer(c_int), value :: index
             logical(c_bool), value :: newmem
         end function
-
-!        !bool qvector_setfirst(qvector_t *vector, const void *data);
-!        function qvector_setfirst_c(vector, data) bind(c, name="qvector_setfirst")
-!            use iso_c_binding, only: c_bool, c_ptr
-!            logical(c_bool) :: qvector_setfirst_c
-!            type(c_ptr), value :: vector
-!            type(c_ptr), value :: data
-!        end function
-!
-!        !bool qvector_setlast(qvector_t *vector, const void *data);
-!        function qvector_setlast_c(vector, data) bind(c, name="qvector_setlast")
-!            use iso_c_binding, only: c_bool, c_ptr
-!            logical(c_bool) :: qvector_setlast_c
-!            type(c_ptr), value :: vector
-!            type(c_ptr), value :: data
-!        end function
 
         !bool qvector_setat(qvector_t *vector, int index, const void *data);
         function qvector_setat_c(vector, index, data) bind(c, name="qvector_setat")
@@ -125,20 +93,6 @@ module qvector_interfaces_m
             type(c_ptr), value :: data
         end function
 
-!        !void *qvector_popfirst(qvector_t *vector);
-!        function qvector_popfirst(vector) bind(c)
-!            use iso_c_binding, only: c_ptr
-!            type(c_ptr) :: qvector_popfirst
-!            type(c_ptr), value :: vector
-!        end function
-!
-!        !void *qvector_poplast(qvector_t *vector);
-!        function qvector_poplast(vector) bind(c)
-!            use iso_c_binding, only: c_ptr
-!            type(c_ptr) :: qvector_poplast
-!            type(c_ptr), value :: vector
-!        end function
-
         !void *qvector_popat(qvector_t *vector, int index);
         function qvector_popat_c(vector, index) bind(c, name="qvector_popat")
             use iso_c_binding, only: c_ptr, c_int
@@ -146,20 +100,6 @@ module qvector_interfaces_m
             type(c_ptr), value :: vector
             integer(c_int), value :: index
         end function
-
-!        !bool qvector_removefirst(qvector_t *vector);
-!        function qvector_removefirst(vector) bind(c)
-!            use iso_c_binding, only: c_bool, c_ptr
-!            logical(c_bool) :: qvector_removefirst
-!            type(c_ptr), value :: vector
-!        end function
-!
-!        !bool qvector_removelast(qvector_t *vector);
-!        function qvector_removelast(vector) bind(c)
-!            use iso_c_binding, only: c_bool, c_ptr
-!            logical(c_bool) :: qvector_removelast
-!            type(c_ptr), value :: vector
-!        end function
 
         !bool qvector_removeat(qvector_t *vector, int index);
         function qvector_removeat_c(vector, index) bind(c, name="qvector_removeat")
@@ -184,39 +124,11 @@ module qvector_interfaces_m
             integer(c_size_t), value :: newmax
         end function
 
-!        !void *qvector_toarray(qvector_t *vector, size_t *size);
-!        function qvector_toarray(vector, size) bind(c)
-!            use iso_c_binding, only: c_ptr
-!            type(c_ptr) :: qvector_toarray
-!            type(c_ptr), value :: vector
-!            type(c_ptr), value :: size
-!        end function
-
-!        !void qvector_lock(qvector_t *vector);
-!        subroutine qvector_lock(vector) bind(c)
-!            use iso_c_binding, only: c_ptr
-!            type(c_ptr), value :: vector
-!        end subroutine
-!
-!        !void qvector_unlock(qvector_t *vector);
-!        subroutine qvector_unlock(vector) bind(c)
-!            use iso_c_binding, only: c_ptr
-!            type(c_ptr), value :: vector
-!        end subroutine
-
         !void qvector_clear(qvector_t *vector);
         subroutine qvector_clear_c(vector) bind(c, name="qvector_clear")
             use iso_c_binding, only: c_ptr
             type(c_ptr), value :: vector
         end subroutine
-
-!        !bool qvector_debug(qvector_t *vector, FILE *out);
-!        function qvector_debug(vector, out) bind(c)
-!            use iso_c_binding, only: c_bool, c_ptr
-!            logical(c_bool) :: qvector_debug
-!            type(c_ptr), value :: vector
-!            type(c_ptr), value :: out
-!        end function
 
         !void qvector_free(qvector_t *vector);
         subroutine qvector_free_c(vector) bind(c, name="qvector_free")

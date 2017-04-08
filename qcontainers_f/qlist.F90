@@ -167,18 +167,6 @@ module qlist_interfaces_m
             type(c_ptr), value :: list
         end function
 
-!        ! void qlist_lock(qlist_t *list);
-!        subroutine qlist_lock_c(list) bind(c, name="qlist_lock")
-!            use iso_c_binding, only: c_ptr
-!            type(c_ptr), value :: list
-!        end subroutine
-!
-!        ! void qlist_unlock(qlist_t *list);
-!        subroutine qlist_unlock_c(list) bind(c, name="qlist_unlock")
-!            use iso_c_binding, only: c_ptr
-!            type(c_ptr), value :: list
-!        end subroutine
-
         ! bool qlist_getnext(qlist_t *list, qlist_obj_t *obj, bool newmem);
         logical(c_bool) function qlist_getnext_c(list, obj, newmem) bind(c, name="qlist_getnext")
             use iso_c_binding !, only: c_ptr, c_bool
@@ -723,21 +711,6 @@ contains
         print *, "Sub: qlist_obj_copy"
         stop "Program terminated!"
 
-!        if (c_associated(to%qobj)) then
-!        print *, "qlist_obj_copy: 'to' is c_associated"
-!        else
-!        print *, "qlist_obj_copy: 'to' is NOT c_associated"
-!        end if
-!
-!        if (to%wasInit == -1) then
-!            to%wasInit = 1
-!            to%qobj = c_null_ptr
-!        end if
-!
-!        if (c_associated(to%qobj)) then
-!            call qlist_objfree(to)
-!        end if
-!        to%qobj = from%qobj
     end subroutine
 
     !> @brief  Returns the value in this object.
