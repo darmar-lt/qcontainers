@@ -4,20 +4,18 @@ About
 *qContainers* is a container library for Fortran language.
 It enables to store *any internal* Fortran data type and 
 *any derived* data type to the container.
-The library wraps a subset of containers from qLibc library for C language and one container 
-(set) from c-algorithms library. 
+The library wraps a subset of containers from qLibc library for C language. 
 
 Following containers are implemented currently:
   * Containers for Key/Value pairs
     * Tree Table (qtreetbl) --- in binary tree (left-leaning red-black tree) data structure.
     * Hash Table (qhashtbl) --- in hash-based data structure.
   * Containers for Objects
-    * List (qlist) --- doubly linked list.
-    * Vector (qvector) --- a growable array of elements.
-    * Set (qset) --- collection of unique values.
+    * List (qlist) --- Doubly Linked List.
+    * Vector (qvector) --- implements a growable array of elements.
 
 
-The library uses some features of Fortran 2003 and TS-29113, therefore a relatively new
+The library uses some features of Fortran 2003 and TS-29113, therefore, a relatively new
 compiler version is required. Assumed-type dummy arguments or compiler directives in
 the case the compiler doesn't support assumed-type variables are used to enable store 
 of any type to the containers.
