@@ -183,8 +183,9 @@ subroutine test_qlist_5()
     use assert_test_m
 
     type(qlist_t) :: list
-    integer :: siz
-    character(len=:), allocatable :: string
+    integer :: siz, nval, i
+    character(len=20) :: onestring
+    character(len=:), allocatable :: string(:)
 
     print *, ""
     print *, "Start of test_qlist_5"
@@ -194,10 +195,26 @@ subroutine test_qlist_5()
     call list%addlast("your ", 5)
     call list%addlast("best. No less.", 14)
 
+    ! Test negative indexes. Test how to get string.
+    nval = list%size()
+    do i = 1, nval
+        onestring = " "                 ! Fill with spaces before the use.
+        call list%getat(-i, onestring)  ! Note here the negative indexes.
+        select case (i)
+        case (1)
+            call assert_equal(onestring, "best. No less.")
+        case (2)
+            call assert_equal(onestring, "your")
+        case (3)
+            call assert_equal(onestring, "Do")
+        end select
+    end do
+
+    ! Test get all content into one long string.
     siz = list%datasize()
-    allocate(character(len=siz) :: string)
+    allocate(character(len=siz) :: string(1))
     call list%toarray(string)
-    call assert_equal(string, "Do your best. No less.")
+    call assert_equal(string(1), "Do your best. No less.")
 end subroutine
 
 subroutine test_qlist_6()
