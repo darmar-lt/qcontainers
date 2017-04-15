@@ -8,6 +8,7 @@ program test_qcontainers
     call testing_qhashtbl()
     call testing_qvector()
     call testing_qlist()
+    call testing_qset()
 
     call assert_conclude()
 end program

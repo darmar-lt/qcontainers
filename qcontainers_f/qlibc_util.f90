@@ -13,8 +13,31 @@ module qlibc_util_m
             logical(c_bool), value   :: freemem
         end subroutine
 
+        !void function qlibc_copy_data_new_c(void* val_from, void** val_to_p, val_size)
+        subroutine qlibc_copy_data_new_c(val_from, val_to_p, val_size) bind(c, name="qlibc_copy_data_new_c")
+            use iso_c_binding, only: c_ptr, c_size_t
+            type(*)     :: val_from
+            type(c_ptr) :: val_to_p
+            integer(c_size_t), value :: val_size
+        end subroutine
+
+        !void qlibc_copy_string_new_c(char str_from[], char* str_to_p[], size_t str_f_len)
+        subroutine qlibc_copy_string_new_c(str_from, str_to_p, str_f_len) bind(c, name="qlibc_copy_string_new_c")
+            use iso_c_binding, only: c_ptr, c_size_t
+            type(c_ptr), value :: str_from
+            type(c_ptr) :: str_to_p
+            integer(c_size_t), value :: str_f_len
+        end subroutine
+
+        !size_t qlibc_cstr_len_c(char str[])
+        function qlibc_cstr_len_c(str) bind(c, name="qlibc_cstr_len_c")
+            use iso_c_binding, only: c_size_t, c_ptr
+            integer(c_size_t) :: qlibc_cstr_len_c
+            type(c_ptr), value :: str
+        end function
+
         ! void qlibc_free_c(void *obj)
-        subroutine qlibc_free_c(obj) bind(c)
+        subroutine qlibc_free_c(obj) bind(c, name="qlibc_free_c")
             import :: c_ptr
             type(c_ptr), value :: obj
         end subroutine

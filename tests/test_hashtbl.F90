@@ -196,7 +196,7 @@ contains
         print *, "qhashtbl test_3a. End"
     end subroutine test_3a
 end subroutine test_qhashtbl_3
-#endif // __PGI
+#endif
 
 subroutine testing_qhashtbl()
     use assert_test_m

@@ -96,6 +96,50 @@
 		<VirtualTargets>
 			<Add alias="All_gcc" targets="qcont_c;Tests;" />
 		</VirtualTargets>
+		<Unit filename="../containers/compare-int.c">
+			<Option compilerVar="CC" />
+			<Option target="qcont_c" />
+			<Option target="qcont_c_PGI" />
+			<Option target="qcont_c_Oracle" />
+		</Unit>
+		<Unit filename="../containers/compare-int.h">
+			<Option target="qcont_c" />
+			<Option target="qcont_c_PGI" />
+			<Option target="qcont_c_Oracle" />
+		</Unit>
+		<Unit filename="../containers/compare-string.c">
+			<Option compilerVar="CC" />
+			<Option target="qcont_c" />
+			<Option target="qcont_c_PGI" />
+			<Option target="qcont_c_Oracle" />
+		</Unit>
+		<Unit filename="../containers/compare-string.h">
+			<Option target="qcont_c" />
+			<Option target="qcont_c_PGI" />
+			<Option target="qcont_c_Oracle" />
+		</Unit>
+		<Unit filename="../containers/hash-int.c">
+			<Option compilerVar="CC" />
+			<Option target="qcont_c" />
+			<Option target="qcont_c_PGI" />
+			<Option target="qcont_c_Oracle" />
+		</Unit>
+		<Unit filename="../containers/hash-int.h">
+			<Option target="qcont_c" />
+			<Option target="qcont_c_PGI" />
+			<Option target="qcont_c_Oracle" />
+		</Unit>
+		<Unit filename="../containers/hash-string.c">
+			<Option compilerVar="CC" />
+			<Option target="qcont_c" />
+			<Option target="qcont_c_PGI" />
+			<Option target="qcont_c_Oracle" />
+		</Unit>
+		<Unit filename="../containers/hash-string.h">
+			<Option target="qcont_c" />
+			<Option target="qcont_c_PGI" />
+			<Option target="qcont_c_Oracle" />
+		</Unit>
 		<Unit filename="../containers/qhashtbl.c">
 			<Option compilerVar="CC" />
 			<Option target="qcont_c" />
@@ -145,6 +189,17 @@
 			<Option target="qcont_c_PGI" />
 			<Option target="qcont_c_Oracle" />
 		</Unit>
+		<Unit filename="../containers/set.c">
+			<Option compilerVar="CC" />
+			<Option target="qcont_c" />
+			<Option target="qcont_c_PGI" />
+			<Option target="qcont_c_Oracle" />
+		</Unit>
+		<Unit filename="../containers/set.h">
+			<Option target="qcont_c" />
+			<Option target="qcont_c_PGI" />
+			<Option target="qcont_c_Oracle" />
+		</Unit>
 		<Unit filename="../internal/md5/md5.h">
 			<Option target="qcont_c" />
 			<Option target="qcont_c_PGI" />
@@ -180,6 +235,12 @@
 			<Option target="Tests_Oracle" />
 		</Unit>
 		<Unit filename="../qcontainers_f/qlist.F90">
+			<Option weight="1" />
+			<Option target="Tests" />
+			<Option target="Tests_PGI" />
+			<Option target="Tests_Oracle" />
+		</Unit>
+		<Unit filename="../qcontainers_f/qset.f90">
 			<Option weight="1" />
 			<Option target="Tests" />
 			<Option target="Tests_PGI" />
@@ -237,6 +298,12 @@
 			<Option target="qcont_c_PGI" />
 			<Option target="qcont_c_Oracle" />
 		</Unit>
+		<Unit filename="../wrap_util_c/qset_util_c.c">
+			<Option compilerVar="CC" />
+			<Option target="qcont_c" />
+			<Option target="qcont_c_PGI" />
+			<Option target="qcont_c_Oracle" />
+		</Unit>
 		<Unit filename="../wrap_util_c/qtreetbl_util_c.c">
 			<Option compilerVar="CC" />
 			<Option target="qcont_c" />
@@ -269,6 +336,12 @@
 		</Unit>
 		<Unit filename="test_qcontainers.f90">
 			<Option weight="1" />
+			<Option target="Tests" />
+			<Option target="Tests_PGI" />
+			<Option target="Tests_Oracle" />
+		</Unit>
+		<Unit filename="test_set.f90">
+			<Option weight="2" />
 			<Option target="Tests" />
 			<Option target="Tests_PGI" />
 			<Option target="Tests_Oracle" />
