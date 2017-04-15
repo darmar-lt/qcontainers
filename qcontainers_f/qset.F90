@@ -1,3 +1,4 @@
+#include "include_defines.fi"
 
 !===========================================
 !
@@ -174,7 +175,7 @@ module qset_util_m
         subroutine qu_set_toarray_c(set, array, size_data) bind(c, name="qu_set_toarray_c")
             use iso_c_binding, only: c_ptr, c_size_t
             type(c_ptr), value :: set
-            type(*), dimension(*) :: array
+            type(c_ptr), value :: array
             integer(c_size_t), value :: size_data
         end subroutine
 
@@ -198,8 +199,8 @@ module qset_util_m
             use iso_c_binding, only: c_ptr, c_size_t, c_bool
             type(c_ptr), value :: to
             type(c_ptr), value :: from
-            integer(c_size_t)  :: val_size
-            logical(c_bool)    :: is_str
+            integer(c_size_t), value :: val_size
+            logical(c_bool), value   :: is_str
         end subroutine
 
     end interface
@@ -228,8 +229,11 @@ module qset_m
         logical :: was_init = .false.
     contains
         final :: qset_free
-        procedure, private :: qset_new_int8, qset_new_int16, qset_new_int32
-        procedure, private :: qset_new_int64, qset_new_char
+        procedure, private :: qset_new_int8
+        procedure, private :: qset_new_int16
+        procedure, private :: qset_new_int32
+        procedure, private :: qset_new_int64
+        procedure, private :: qset_new_char
         generic :: new => qset_new_int8, qset_new_int16, qset_new_int32, &
                             qset_new_int64, qset_new_char                    !< Constructor of the container.
         procedure :: put => qset_put                                         !< Put a value to the set.
@@ -279,7 +283,12 @@ contains
         self%fun_equal = c_funloc(int8_equal_c)
         self%fun_hash  = c_funloc(int8_hash_c)
         self%q_cp = set_new_c(self%fun_hash, self%fun_equal)
+#ifndef __SUNPRO_F95
         self%size_data = c_sizeof(mold)
+#else
+! Oracle fortran 12.5 doesn't have c_sizeof() function, therefore:
+        self%size_data = storage_size(mold) / 8
+#endif
         call set_register_free_function_c(self%q_cp, c_funloc(qlibc_free_c))
 
         self%was_init = .true.
@@ -295,7 +304,12 @@ contains
         self%fun_equal = c_funloc(int16_equal_c)
         self%fun_hash  = c_funloc(int16_hash_c)
         self%q_cp = set_new_c(self%fun_hash, self%fun_equal)
+#ifndef __SUNPRO_F95
         self%size_data = c_sizeof(mold)
+#else
+! Oracle fortran 12.5 doesn't have c_sizeof() function, therefore:
+        self%size_data = storage_size(mold) / 8
+#endif
         call set_register_free_function_c(self%q_cp, c_funloc(qlibc_free_c))
 
         self%was_init = .true.
@@ -311,7 +325,12 @@ contains
         self%fun_equal = c_funloc(int32_equal_c)
         self%fun_hash  = c_funloc(int32_hash_c)
         self%q_cp = set_new_c(self%fun_hash, self%fun_equal)
+#ifndef __SUNPRO_F95
         self%size_data = c_sizeof(mold)
+#else
+! Oracle fortran 12.5 doesn't have c_sizeof() function, therefore:
+        self%size_data = storage_size(mold) / 8
+#endif
         call set_register_free_function_c(self%q_cp, c_funloc(qlibc_free_c))
 
         self%was_init = .true.
@@ -327,7 +346,12 @@ contains
         self%fun_equal = c_funloc(int64_equal_c)
         self%fun_hash  = c_funloc(int64_hash_c)
         self%q_cp = set_new_c(self%fun_hash, self%fun_equal)
+#ifndef __SUNPRO_F95
         self%size_data = c_sizeof(mold)
+#else
+! Oracle fortran 12.5 doesn't have c_sizeof() function, therefore:
+        self%size_data = storage_size(mold) / 8
+#endif
         call set_register_free_function_c(self%q_cp, c_funloc(qlibc_free_c))
 
         self%was_init = .true.
@@ -369,7 +393,11 @@ contains
     !!
     subroutine qset_put(self, val_data, success)
         class(qset_t), intent(inout) :: self
-        type(*), intent(in) :: val_data
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*), intent(in) :: val_data   !< data to put
+#else
+#include "nocheck_val_data.fi"
+#endif
         logical, optional, intent(out) :: success
 
         type(c_ptr) ::  vd_new_p
@@ -423,7 +451,11 @@ contains
     !!
     subroutine qset_remove(self, val_data, success)
         class(qset_t), intent(inout) :: self
+#ifndef USE_COMPILER_DIRECTIVE
         type(*), target, intent(in) :: val_data
+#else
+#include "nocheck_val_data.fi"
+#endif
         logical, optional, intent(out) :: success
 
         integer :: res
@@ -477,7 +509,11 @@ contains
     function qset_has(self, val_data)
         logical :: qset_has
         class(qset_t), intent(in) :: self
+#ifndef USE_COMPILER_DIRECTIVE
         type(*), target, intent(in) :: val_data
+#else
+#include "nocheck_val_data.fi"
+#endif
 
         integer :: res
 
@@ -544,7 +580,11 @@ contains
     !!
     subroutine qset_getdata(obj, val_data)
         class(qset_obj_t), intent(in) :: obj
+#ifndef USE_COMPILER_DIRECTIVE
         type(*), target :: val_data
+#else
+#include "nocheck_val_data.fi"
+#endif
 
         logical(c_bool) :: freemem = .false.
 
@@ -575,11 +615,15 @@ contains
 
     !> @brief  Returns the array containing all the elements in this set.
     !!
-    subroutine qset_toarray(self, val_arr)
+    subroutine qset_toarray(self, val_data)
         class(qset_t), intent(in) :: self
-        type(*), dimension(*) :: val_arr   !< return array which is filled with values. This array should be large enough to contain all values.
+#ifndef USE_COMPILER_DIRECTIVE
+        type(*), dimension(*), target :: val_data   !< return array which is filled with values. This array should be large enough to contain all values.
+#else
+#include "nocheck_val_data.fi"
+#endif
 
-        call qu_set_toarray_c(self%q_cp, val_arr, self%size_data)
+        call qu_set_toarray_c(self%q_cp, c_loc(val_data), self%size_data)
     end subroutine
 
     !> @brief Returns the array containing all the elements (strings) in this set.
@@ -612,7 +656,7 @@ contains
         type(qset_t), intent(inout) :: to
         type(qset_t), intent(in)    :: from
 
-        call qset_free(to);
+        call qset_free(to)
 
         if (.not. from%was_init) return
 

@@ -1,4 +1,6 @@
 build
+bin
+obj
 
 *.depend
 *.layout

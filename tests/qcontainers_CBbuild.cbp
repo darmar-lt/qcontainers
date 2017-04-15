@@ -228,7 +228,7 @@
 			<Option target="Tests_PGI" />
 			<Option target="Tests_Oracle" />
 		</Unit>
-		<Unit filename="../qcontainers_f/qlibc_util.f90">
+		<Unit filename="../qcontainers_f/qlibc_util.F90">
 			<Option weight="0" />
 			<Option target="Tests" />
 			<Option target="Tests_PGI" />
@@ -240,7 +240,7 @@
 			<Option target="Tests_PGI" />
 			<Option target="Tests_Oracle" />
 		</Unit>
-		<Unit filename="../qcontainers_f/qset.f90">
+		<Unit filename="../qcontainers_f/qset.F90">
 			<Option weight="1" />
 			<Option target="Tests" />
 			<Option target="Tests_PGI" />

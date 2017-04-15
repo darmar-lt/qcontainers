@@ -40,11 +40,12 @@ subroutine test_qset_1()
     deallocate(arr)
 
     !------------------
-    ! Remove some value
-    call qs%remove(vback, success)
+    ! Remove one value
+    call qs%remove(10, success)
     call assert_true(success)
-    call qs%remove(vback, success)
+    call qs%remove(10, success)
     call assert_false(success)
+    call assert_equal(qs%size(), 9)
 
     !-----------------------
     ! Put set values to array
@@ -52,17 +53,20 @@ subroutine test_qset_1()
     arr = -999
     call qs%toarray(arr)
     print *, "Values from set: ", arr
-    call assert_true(all(arr >= 1 .and. arr <= 10))
+    call assert_true(all(arr >= 1 .and. arr <= 9))
 
     !-----------------------
     ! Test copy
     qs_copy = qs
     call qs%clear()
+    call assert_equal(qs%size(), 0)
     print *, "After clear size of set=", qs%size()
 
     allocate(arr2(qs_copy%size()))
+    call assert_equal(qs_copy%size(), 9)
     call qs_copy%toarray(arr2)
     print *, "Copied values=", arr2
+    call assert_true(all(arr2 >= 1 .and. arr2 <= 10))
 
     !--------------
     print *, "qset test_1. End"
@@ -131,6 +135,7 @@ subroutine test_qset_2()
     !---------------------
     ! Test copy
     qs_copy = qs
+    call qs%clear()
     call assert_equal(qs_copy%size(), 3)
 
     call obj%init()

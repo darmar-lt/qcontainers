@@ -51,30 +51,44 @@
 				</Linker>
 			</Target>
 		</Build>
-		<Unit filename="../qcontainers_f/qhashtbl.F90" />
-		<Unit filename="../qcontainers_f/qlibc_util.f90">
+		<Unit filename="../qcontainers_f/qhashtbl.F90">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../qcontainers_f/qlibc_util.F90">
 			<Option weight="0" />
 		</Unit>
-		<Unit filename="../qcontainers_f/qlist.F90" />
-		<Unit filename="../qcontainers_f/qset.f90" />
-		<Unit filename="../qcontainers_f/qtreetbl.F90" />
-		<Unit filename="../qcontainers_f/qvector.F90" />
+		<Unit filename="../qcontainers_f/qlist.F90">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../qcontainers_f/qset.F90">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../qcontainers_f/qtreetbl.F90">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="../qcontainers_f/qvector.F90">
+			<Option weight="1" />
+		</Unit>
 		<Unit filename="assert_test.f90">
 			<Option weight="0" />
 		</Unit>
-		<Unit filename="test_hashtbl.F90" />
+		<Unit filename="test_hashtbl.F90">
+			<Option weight="2" />
+		</Unit>
 		<Unit filename="test_list.f90">
-			<Option weight="1" />
+			<Option weight="2" />
 		</Unit>
 		<Unit filename="test_qcontainers.f90">
 			<Option weight="1" />
 		</Unit>
-		<Unit filename="test_set.f90" />
+		<Unit filename="test_set.f90">
+			<Option weight="2" />
+		</Unit>
 		<Unit filename="test_treetbl.f90">
-			<Option weight="1" />
+			<Option weight="2" />
 		</Unit>
 		<Unit filename="test_vector.f90">
-			<Option weight="1" />
+			<Option weight="2" />
 		</Unit>
 		<Extensions>
 			<envvars />

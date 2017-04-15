@@ -1,4 +1,8 @@
+#include "include_defines.fi"
 
+!===========================================
+!
+!===========================================
 module qlibc_util_m
     use iso_c_binding
     implicit none
@@ -14,9 +18,13 @@ module qlibc_util_m
         end subroutine
 
         !void function qlibc_copy_data_new_c(void* val_from, void** val_to_p, val_size)
-        subroutine qlibc_copy_data_new_c(val_from, val_to_p, val_size) bind(c, name="qlibc_copy_data_new_c")
+        subroutine qlibc_copy_data_new_c(val_data, val_to_p, val_size) bind(c, name="qlibc_copy_data_new_c")
             use iso_c_binding, only: c_ptr, c_size_t
-            type(*)     :: val_from
+#ifndef USE_COMPILER_DIRECTIVE
+            type(*) :: val_data
+#else
+#include "nocheck_val_data.fi"
+#endif
             type(c_ptr) :: val_to_p
             integer(c_size_t), value :: val_size
         end subroutine

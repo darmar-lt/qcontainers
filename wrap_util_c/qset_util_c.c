@@ -67,6 +67,7 @@ void qu_set_copy_c(Set *to, Set *from, size_t val_size, bool is_str) {
     else {
         void *val_p;
         void *val_copy;
+        set_iterate(from, &iterator);
         while (set_iter_has_more(&iterator)) {
             val_p = set_iter_next(&iterator);
             val_copy = malloc(val_size);
