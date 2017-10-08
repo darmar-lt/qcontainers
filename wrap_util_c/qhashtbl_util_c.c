@@ -36,7 +36,7 @@ qhashtbl_obj_t* qhashtbl_getobj_c() {
 }
 
 void qhashtbl_objinit_c(qhashtbl_obj_t *obj) {
-    memset((void *) obj, 0, sizeof(obj));;
+    memset((void *) obj, 0, sizeof(qhashtbl_obj_t));;
 }
 
 void qhashtbl_getname_c(qhashtbl_obj_t *obj, void *name) {

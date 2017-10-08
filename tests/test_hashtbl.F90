@@ -6,7 +6,7 @@ subroutine test_qhashtbl_1()
 
     type(qhashtbl_t) :: qh
     integer :: isiz
-    integer :: v, vg
+    integer :: v, vg, i
     logical :: haskey
     logical :: isok
     character(len=:), allocatable :: key
@@ -54,6 +54,14 @@ subroutine test_qhashtbl_1()
             call assert_equal(vg, 104)
         end if
     end do
+
+    !--------------
+    i = 0
+    call obj%init()
+    do while(qh%getnext(obj))
+        i = i + 1
+    end do
+    call assert_equal(i, 5)
 
     !--------------
     call qh%remove("e2", isok)

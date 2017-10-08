@@ -45,12 +45,12 @@ qlist_obj_t* qlist_getobj_c() {
     if (obj == NULL) {
         return NULL;
     }
-    memset((void *) obj, 0, sizeof(obj));
+    memset((void *) obj, 0, sizeof(qlist_obj_t));
     return obj;
 }
 
 void qlist_objinit_c(qlist_obj_t *obj) {
-    memset((void *) obj, 0, sizeof(obj));;
+    memset((void *) obj, 0, sizeof(qlist_obj_t));;
 }
 
 void qlist_objfree_c(qlist_obj_t *obj) {

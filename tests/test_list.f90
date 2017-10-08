@@ -71,6 +71,16 @@ subroutine test_qlist_2()
         call assert_equal(vback, real(i, kind=8))
         i = i + 1
     end do
+    call assert_equal(i-1, list%size())
+
+    i = 1
+    call obj%init()
+    do while (list%getnext(obj))
+        call obj%getdata(vback)
+        call assert_equal(vback, real(i, kind=8))
+        i = i + 1
+    end do
+    call assert_equal(i-1, list%size())
 
     isiz = list%size()
     do i = 1, isiz

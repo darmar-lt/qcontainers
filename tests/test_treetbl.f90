@@ -6,7 +6,7 @@ subroutine test_qtreetbl_1()
 
     type(qtreetbl_t) :: qt
     integer :: isiz
-    integer :: v, vg
+    integer :: v, vg, i
     logical :: suc, haskey
     logical :: isok
     character(len=20) :: key
@@ -46,6 +46,7 @@ subroutine test_qtreetbl_1()
     call assert_equal(isiz, 5)
 
     !--------------
+    i = 0
     call obj%init()
     do while(qt%getnext(obj))
         key = "" ! empty name
@@ -56,7 +57,17 @@ subroutine test_qtreetbl_1()
             call obj%getdata(vg)
             call assert_equal(vg, 104)
         end if
+        i = i + 1
     end do
+    call assert_equal(i, 5)
+
+    !--------------
+    i = 0
+    call obj%init()
+    do while(qt%getnext(obj))
+        i = i + 1
+    end do
+    call assert_equal(i, 5)
 
     !--------------
     call qt%remove("e2", isok)

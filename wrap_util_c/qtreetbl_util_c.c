@@ -37,7 +37,7 @@ qtreetbl_obj_t* qtreetbl_getobj_c() {
 }
 
 void qtreetbl_objinit_c(qtreetbl_obj_t *obj) {
-    memset((void *) obj, 0, sizeof(obj));;
+    memset((void *) obj, 0, sizeof(qtreetbl_obj_t));;
 }
 
 void qtreetbl_getname_c(qtreetbl_obj_t *obj, void *name) {
