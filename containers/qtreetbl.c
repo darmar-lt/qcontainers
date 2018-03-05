@@ -1022,11 +1022,6 @@ static qtreetbl_obj_t *put_obj(qtreetbl_t *tbl, qtreetbl_obj_t *obj,
         return new_obj(true, name, namesize, data, datasize);
     }
 
-    // split 4-nodes on the way down.
-    if (is_red(obj->left) && is_red(obj->right)) {
-        flip_color(obj);
-    }
-
     int cmp = tbl->compare(obj->name, obj->namesize, name, namesize);
     if (cmp == 0) {  // existing key found.
         void *copydata = qmemdup(data, datasize);
@@ -1049,6 +1044,11 @@ static qtreetbl_obj_t *put_obj(qtreetbl_t *tbl, qtreetbl_obj_t *obj,
     // fix two reds in a row on the way up
     if (is_red(obj->left) && is_red(obj->left->left)) {
         obj = rotate_right(obj);
+    }
+
+    // split 4-nodes on the way up.
+    if (is_red(obj->left) && is_red(obj->right)) {
+        flip_color(obj);
     }
 
     return obj;
