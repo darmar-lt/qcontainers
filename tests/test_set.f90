@@ -102,7 +102,7 @@ subroutine test_qset_2()
     end do
 
     call assert_true(qs%hasstr("Use"))
-    call assert_false(qs%hasstr("use")) ! Upper and lower case are not the equal.
+    call assert_false(qs%hasstr("use")) ! Upper and lower case are not equal.
 
     !----------------------
     ! Iterate over the container

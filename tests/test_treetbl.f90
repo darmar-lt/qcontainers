@@ -16,7 +16,6 @@ subroutine test_qtreetbl_1()
     print *, "Start of test_qtreetbl_1"
 
     isiz = storage_size(v) / 8
-    key = "namas"
     call qt%new(isiz)
     v = 101
     call qt%put("e1", v)
