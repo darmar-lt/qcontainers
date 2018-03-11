@@ -14,13 +14,13 @@ and Oracle Fortran compilers.
 1) Install CMake on your system (cmake.org). 
 
 2) Open CMake GUI, choose C compiler you will use.
-Choose a separate new directory where the binaries are build.
+Choose a separate new directory where the binaries are build (<build_dir>).
 Perform Configure and Generate.
 
 3) Run `make` in the build directory in the terminal (cmd on Windows) 
 to compile the source code. In case of Windows (not for MinGW), CMake will 
 generate Visual Studio project. Open Visual Studio and compile the project.
-In case of success, the directory 'lib' (<qcontainers_dir>/lib) will be 
+In case of success, the directory '<build_dir>/lib' will be
 created which contains the static library 'libqcontainers.a' or 
 'libqcontainers.lib'.
 
