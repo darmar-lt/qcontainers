@@ -71,11 +71,6 @@ module qtreetbl_interfaces_m
             integer(c_int), value :: options
         end function
 
-        !void qtreetbl_set_compare( qtreetbl_t *tbl, int (*cmp)(const void *name1, size_t namesize1, const void *name2, size_t namesize2));
-        subroutine qtreetbl_set_compare() bind(c)
-            use iso_c_binding, only:
-        end subroutine
-
         !bool qtreetbl_put_by_obj(qtreetbl_t *tbl, const void *name, size_t namesize, const void *data, size_t datasize);
         function qtreetbl_put_by_obj_c(tbl, name, namesize, data, datasize) bind(c,name="qtreetbl_put_by_obj")
             use iso_c_binding, only: c_bool, c_ptr, c_size_t
@@ -204,7 +199,7 @@ module qtreetbl_m
         procedure :: size => qtreetbl_size                           !< Get current size (number of pairs) in the container.
     end type
 
-    ! Type describes a one object of the treetbl
+    ! Type describes one object of the treetbl
     type, public :: qtreetbl_obj_t
         type(c_ptr) :: qobj = c_null_ptr
         logical :: wasInit = .false.
@@ -332,8 +327,7 @@ contains
         else
             sd = self%size_data
         end if
-        suc_c = qtreetbl_put_by_obj_c(self%q_cp, c_loc(name), int(name_size,kind=c_size_t), c_loc(val_data), &
-                                        int(size_data,kind=c_size_t))
+        suc_c = qtreetbl_put_by_obj_c(self%q_cp, c_loc(name), int(name_size,kind=c_size_t), c_loc(val_data), sd)
         if (present(success)) success = suc_c
     end subroutine
 
