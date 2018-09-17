@@ -227,7 +227,7 @@ module qvector_m
     end interface
 
     private
-    public :: qvector_new, assignment(=)
+    public :: assignment(=)
 
 contains
 
